@@ -95,7 +95,16 @@ Below, you can find additional information about each tables and fields on the d
 
 ### 3.3. Mockups and Views
 
-https://www.dropbox.com/s/275zzn3fv4i56wy/Django-GameStore.pdf?dl=0
+![](https://i.imgur.com/mpVuusW.png)
+![](https://i.imgur.com/r5ndqhP.png)
+![](https://i.imgur.com/GiuRgLh.png)
+![](https://i.imgur.com/Wvs67B5.png)
+![](https://i.imgur.com/7kNQQvZ.png)
+![](https://i.imgur.com/PzkKwt5.png)
+![](https://i.imgur.com/uGzGua4.png)
+![](https://i.imgur.com/SkFpXix.png)
+
+
 
 ## 4. Process and Time Schedule
 For communication we will use Slack and for version control Git. We are going to code alone and to meet face-to-face only if needed.
