@@ -133,7 +133,8 @@ source /vagrant/$PROJECT_NAME/$PROJECT_NAME"env/bin/activate"
 echo "------------------------------------------------"
 echo "install python-psycopg2 to connect python with postgresql within the virtualenv"
 echo "------------------------------------------------"
-sudo apt-get build-dep python-psycopg2
+sudo apt-get install -y python-psycopg2
+sudo apt-get install -y libpq-dev
 pip install psycopg2
 
 echo "------------------------------------------------"
