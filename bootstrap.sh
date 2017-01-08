@@ -147,7 +147,7 @@ echo "------------------------------------------------"
 echo "test django with python web server"
 echo "------------------------------------------------"
 sudo ufw allow 8000
-timeout 10s /vagrant/myproject/manage.py runserver 0.0.0.0:8000
+timeout 10s /vagrant/$PROJECT_NAME/manage.py runserver 0.0.0.0:8000
 deactivate
 
 echo "------------------------------------------------"
