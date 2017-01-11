@@ -1,0 +1,3 @@
+This is text.
+This file should go to develop branch instead of master.
+
