@@ -1,2 +1,7 @@
 .vagrant
+
+/gamemart/gamemart/__pycache__
+
+*.pyc
+
 /gamemart/gamemartenv

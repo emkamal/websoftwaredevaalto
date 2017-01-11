@@ -133,7 +133,8 @@ source /vagrant/$PROJECT_NAME/$PROJECT_NAME"env/bin/activate"
 echo "------------------------------------------------"
 echo "install python-psycopg2 to connect python with postgresql within the virtualenv"
 echo "------------------------------------------------"
-sudo apt-get build-dep python-psycopg2
+sudo apt-get install -y python-psycopg2
+sudo apt-get install -y libpq-dev
 pip install psycopg2
 
 echo "------------------------------------------------"
@@ -146,7 +147,7 @@ echo "------------------------------------------------"
 echo "test django with python web server"
 echo "------------------------------------------------"
 sudo ufw allow 8000
-timeout 10s /vagrant/myproject/manage.py runserver 0.0.0.0:8000
+timeout 10s /vagrant/$PROJECT_NAME/manage.py runserver 0.0.0.0:8000
 deactivate
 
 echo "------------------------------------------------"
