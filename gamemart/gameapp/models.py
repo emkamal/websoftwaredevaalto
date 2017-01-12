@@ -1,15 +1,16 @@
-"""
 from django.db import models
 
+class Taxonomy(models.Model):
+    taxonomy_type = models.CharField(max_length=20)
+    label = models.CharField(max_length=50)
+    parent_id = models.ForeignKey('self')
 
-class Product(models.Model):
+class Game_Taxonomy(models.Model):
+    game_id = models.ForeignKey(Game)
+    taxonomy_id = models.ForeignKey(Taxonomy)
 
-    title = models.CharField(max_length=255, unique=True)
-    description = models.TextField(blank=True)
-    image_url = models.URLField(blank=True)
-    quantity = models.IntegerField(default=0)
-
-    def sell(self):
-    	self.quantity = self.quantity - 1
-	    self.save()
-"""
+class Review(models.Model):
+    game_id = models.ForeignKey(Game)
+    user_id = models.ForeignKey(User)
+    rating = models.IntegerField()
+    review = models.TextField()
