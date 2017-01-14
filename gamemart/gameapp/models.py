@@ -33,3 +33,22 @@ class Game(models.Model):
     instruction = model.TextField()
     url = model.URLField()
     price = model.FloatField()
+
+class Asset(models.Model):
+    asset_id = models.ForeignKey(User)
+    asset_type = models.CharField(max_length=50)
+    url = models.URLField()
+    owner_id models.ForeignKey(Game)
+
+class Gameplay(models.Model):
+    player_id = models.ForeignKey(User)
+    game_id = models.ForeignKey(game)
+    score = models.FloatField()
+    state = models.CharField(max_length=10)
+    timestamp = models.DateTimeField(auto_now=true)
+
+class Purchase(models.Models):
+    buyer_id = models.ForeignKey(User)
+    game_id = models.ForeignKey(Game)
+    date = models.DateTimeField(auto_now=true)
+    amount = models.FloatField()
