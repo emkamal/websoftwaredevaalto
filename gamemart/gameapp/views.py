@@ -4,7 +4,7 @@ from django.shortcuts import render
 """from gameapp.models import Product"""
 
 def login(request):
-    return render(request, "register/login.html")
+    return render(request, "registration/login.html")
 
 def register(request):
     if request.method == 'POST':
