@@ -6,6 +6,9 @@ from django.shortcuts import render
 def login(request):
     return render(request, "registration/login.html")
 
+def logout(request):
+    return render(request, "registration/logged_out.html")
+
 def register(request):
     if request.method == 'POST':
         user_form = UserForm(data=request.POST)
