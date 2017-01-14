@@ -16,7 +16,7 @@ class Review(models.Model):
     review = models.TextField()
 
 class User(models.Model):
-    pic = models.ForeignKey(Asset)
+    pic = models.ForeignKey(Asset, on_delete=models.CASCADE, related_name='assets')
     name = model.CharField(max_length=50)
     email = model.EmailField()
     password = model.CharField(max_length=512)
