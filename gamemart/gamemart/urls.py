@@ -14,7 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 
-
+"""    url(r'^login/$', views.login, name='login'),
+    url(r'^logout/$', views.logout, {'next_page': '/'}, name='logout'),"""
 """ url(r'^register/$', 'gamemart.views.register'),"""
 
 
@@ -23,7 +24,5 @@ from django.contrib import admin
 from django.contrib.auth import views
 
 urlpatterns = [
-"""    url(r'^login/$', views.login, name='login'),
-    url(r'^logout/$', views.logout, {'next_page': '/'}, name='logout'),"""
     url(r'^admin/', admin.site.urls),
 ]
