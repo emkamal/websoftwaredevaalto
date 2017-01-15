@@ -1,4 +1,4 @@
-om django.db import models
+from django.db import models
 
 class Taxonomy(models.Model):
     taxonomy_type = models.CharField(max_length=20)
