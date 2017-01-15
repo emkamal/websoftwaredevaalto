@@ -3,11 +3,11 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render
 """from gameapp.models import Product"""
 
-def login(request):
-    return render(request, "registration/login.html")
+"""def login(request):
+    return render(request, "registration/login.html")"""
 
-def logout(request):
-    return render(request, "registration/logged_out.html")
+"""def logout(request):
+    return render(request, "registration/logged_out.html")"""
 
 def register(request):
     if request.method == 'POST':
