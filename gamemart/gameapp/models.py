@@ -38,11 +38,11 @@ class Asset(models.Model):
     asset_id = models.ForeignKey(User)
     asset_type = models.CharField(max_length=50)
     url = models.URLField()
-    owner_id models.ForeignKey(Game)
+    owner_id = models.ForeignKey(Game)
 
 class Gameplay(models.Model):
     player_id = models.ForeignKey(User)
-    game_id = models.ForeignKey(game)
+    game_id = models.ForeignKey(Game)
     score = models.FloatField()
     state = models.CharField(max_length=10)
     timestamp = models.DateTimeField(auto_now=true)
