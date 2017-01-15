@@ -1,4 +1,4 @@
-from django.db import models
+om django.db import models
 
 class Taxonomy(models.Model):
     taxonomy_type = models.CharField(max_length=20)
@@ -17,22 +17,22 @@ class Review(models.Model):
 
 class User(models.Model):
     pic = models.ForeignKey(Asset, on_delete=models.CASCADE, related_name='assets')
-    name = model.CharField(max_length=50)
-    email = model.EmailField()
-    password = model.CharField(max_length=512)
-    bio = model.TextField()
+    name = models.CharField(max_length=50)
+    email = models.EmailField()
+    password = models.CharField(max_length=512)
+    bio = models.TextField()
     register_date = models.DateTimeField()
     last_login = models.DateTimeField()
-    user_type = model.CharField(max_length=10) # player, developer, admin
-    is_validated = model.BooleanField()
+    user_type = models.CharField(max_length=10) # player, developer, admin
+    is_validated = models.BooleanField()
 
 class Game(models.Model):
     owner_id = models.ForeignKey(User)
-    title = model.CharField(max_length=100)
-    desc = model.TextField()
-    instruction = model.TextField()
-    url = model.URLField()
-    price = model.FloatField()
+    title = models.CharField(max_length=100)
+    desc = models.TextField()
+    instruction = models.TextField()
+    url = models.URLField()
+    price = models.FloatField()
 
 class Asset(models.Model):
     asset_id = models.ForeignKey(User)
