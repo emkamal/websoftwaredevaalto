@@ -45,10 +45,10 @@ class Gameplay(models.Model):
     game_id = models.ForeignKey('Game')
     score = models.FloatField()
     state = models.CharField(max_length=10)
-    timestamp = models.DateTimeField(auto_now=true)
+    timestamp = models.DateTimeField(auto_now=True)
 
 class Purchase(models.Model):
     buyer_id = models.ForeignKey('User')
     game_id = models.ForeignKey('Game')
-    date = models.DateTimeField(auto_now=true)
+    date = models.DateTimeField(auto_now=True)
     amount = models.FloatField()
