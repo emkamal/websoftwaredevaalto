@@ -128,6 +128,7 @@ echo "activate virtualenv"
 echo "------------------------------------------------"
 #mkdir /vagrant/$PROJECT_NAME
 virtualenv /vagrant/$PROJECT_NAME/$PROJECT_NAME"env"
+sudo cp /vagrant/settings/init.bashrc ~/.bashrc
 source /vagrant/$PROJECT_NAME/$PROJECT_NAME"env/bin/activate"
 
 echo "------------------------------------------------"
