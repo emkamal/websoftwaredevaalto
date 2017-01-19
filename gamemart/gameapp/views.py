@@ -1,13 +1,12 @@
 
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
-"""from gameapp.models import Product"""
+from gameapp.forms import UserForm
 
-"""def login(request):
-    return render(request, "registration/login.html")"""
 
-"""def logout(request):
-    return render(request, "registration/logged_out.html")"""
+def home(request):
+    """return render(request, 'home.html')"""
+    return HttpResponse("home page")
 
 def register(request):
     if request.method == 'POST':
