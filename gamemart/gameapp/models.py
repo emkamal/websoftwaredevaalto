@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 class Taxonomy(models.Model):
     taxonomy_type = models.CharField(max_length=20)
@@ -12,18 +12,13 @@ class Game_Taxonomy(models.Model):
 
 class Review(models.Model):
     game_id = models.ForeignKey('Game')
-    person_id = models.ForeignKey('Person')
+    person_id = models.ForeignKey('User')
     rating = models.IntegerField()
     review = models.TextField()
 
-""" We extend User model which has the following fields:
--username
--email
--password
--last_login
-That's why we don't have to write those fields to Person model"""
-class Person(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+"""class User(models.Model):"""
+class User(AbstractUser):
+    """user = models.OneToOneField(User, on_delete=models.CASCADE)"""
     pic = models.ForeignKey('Asset', on_delete=models.CASCADE, related_name='assets')
     """name = models.CharField(max_length=50)"""
     """email = models.EmailField()"""
@@ -35,7 +30,7 @@ class Person(models.Model):
     is_validated = models.BooleanField()
 
 class Game(models.Model):
-    owner_id = models.ForeignKey('Person')
+    owner_id = models.ForeignKey('User')
     title = models.CharField(max_length=100)
     desc = models.TextField()
     instruction = models.TextField()
@@ -43,20 +38,20 @@ class Game(models.Model):
     price = models.FloatField()
 
 class Asset(models.Model):
-    asset_id = models.ForeignKey('Person')
+    asset_id = models.ForeignKey('User')
     asset_type = models.CharField(max_length=50)
     url = models.URLField()
     owner_id = models.ForeignKey('Game')
 
 class Gameplay(models.Model):
-    player_id = models.ForeignKey('Person')
+    player_id = models.ForeignKey('User')
     game_id = models.ForeignKey('Game')
     score = models.FloatField()
     state = models.CharField(max_length=10)
     timestamp = models.DateTimeField(auto_now=True)
 
 class Purchase(models.Model):
-    buyer_id = models.ForeignKey('Person')
+    buyer_id = models.ForeignKey('User')
     game_id = models.ForeignKey('Game')
     date = models.DateTimeField(auto_now=True)
     amount = models.FloatField()
