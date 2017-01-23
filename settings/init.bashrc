@@ -114,3 +114,4 @@ if ! shopt -oq posix; then
 fi
 
 alias gamemartenv='source /vagrant/gamemart/gamemartenv/bin/activate'
+alias togamemart='cd /vagrant/gamemart/'
