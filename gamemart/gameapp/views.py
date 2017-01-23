@@ -1,7 +1,7 @@
-
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
 from gameapp.forms import UserForm
+from gameapp import views
 
 
 def home(request):
@@ -15,7 +15,7 @@ def register(request):
             user = user_form.save()
             user.set_password(user.password)
             user.save()
-            return redirect('home_page')
+            return redirect(views.home)
     else:
         user_form = UserForm()
     return render(request, 'registration/register.html', {'form': user_form })

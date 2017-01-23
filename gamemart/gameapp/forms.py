@@ -7,4 +7,4 @@ class UserForm(forms.ModelForm):
   class Meta:
     model = User # We want to use User model ...
     # ... and the form should have the following fields
-    fields = ('username', 'email', 'password')
+    fields = ('first_name', 'last_name', 'username', 'password', 'email', 'user_type')

@@ -1,0 +1,41 @@
+{% block content %}
+
+   <h2>Registration</h2>
+
+     <form action="/register" method="post">
+     {% csrf_token %}
+     <p>
+       <label for="id_first_name">First name:</label>
+       <input id="id_first_name" type="text" name="first_name"/>
+     </p><p>
+       <label for="id_last_name">Last name:</label>
+       <input id="id_last_name" type="text" name="last_name"/>
+     </p><p>
+       <label for="id_username">Username:</label>
+       <input id="id_username" type="text" name="username"/>
+     </p><p>
+       <label for="id_password">Password:</label>
+       <input id="id_password" type="password" name="password"/>
+     </p>
+     <p>
+       <label for="id_password_again">Password again:</label>
+       <input id="id_password_again" type="password" name="password"/>
+     </p>
+     <p>
+       <label for="id_email">Email:</label>
+       <input id="id_email" type="email" name="email"/>
+     </p><p>
+       <label for="id_user_type">User type:</label>
+       <select name="user_type">
+         <option value="player">Player</option>
+         <option value="developer">Developer</option>
+         <option value="admin">Admin</option>
+       </select>
+     </p>
+
+     <!--{{form.as_p}} -->
+     <input type="submit" value="Register" />
+
+   </form>
+
+{% endblock %}
