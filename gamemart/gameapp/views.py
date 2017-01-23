@@ -5,8 +5,8 @@ from gameapp.forms import UserForm
 
 
 def home(request):
-    """return render(request, 'home.html')"""
-    return HttpResponse("home page")
+    return render(request, 'home.html')
+    # return HttpResponse("home page")
 
 def register(request):
     if request.method == 'POST':
