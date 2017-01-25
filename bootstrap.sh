@@ -127,7 +127,7 @@ echo "------------------------------------------------"
 echo "activate virtualenv"
 echo "------------------------------------------------"
 #mkdir /vagrant/$PROJECT_NAME
-virtualenv /vagrant/$PROJECT_NAME/$PROJECT_NAME"env"
+virtualenv /vagrant/$PROJECT_NAME/$PROJECT_NAME"env" --always-copy
 sudo cp /vagrant/settings/init.bashrc ~/.bashrc
 source /vagrant/$PROJECT_NAME/$PROJECT_NAME"env/bin/activate"
 
@@ -162,5 +162,7 @@ sudo apache2ctl restart
 echo "================================================"
 echo "ALL DONE!"
 echo "================================================"
+
+#virtualenv /vagrant/gamemart/gamemartenv
 #source /vagrant/gamemart/gamemartenv/bin/activate
 #/vagrant/gamemart/manage.py runserver 0.0.0.0:8000
