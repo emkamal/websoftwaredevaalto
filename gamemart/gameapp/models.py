@@ -16,17 +16,13 @@ class Review(models.Model):
     rating = models.IntegerField()
     review = models.TextField()
 
-"""class User(models.Model):"""
+#class User(models.Model):
 class User(AbstractUser):
-    """user = models.OneToOneField(User, on_delete=models.CASCADE)"""
     pic = models.ForeignKey('Asset', on_delete=models.CASCADE, related_name='assets')
-    """name = models.CharField(max_length=50)"""
-    """email = models.EmailField()"""
-    """password = models.CharField(max_length=512)"""
     bio = models.TextField()
     register_date = models.DateTimeField()
-    """last_login = models.DateTimeField()"""
-    user_type = models.CharField(max_length=10) # player, developer, admin
+    #user_type values are player, developer and admin
+    user_type = models.CharField(max_length=10)
     is_validated = models.BooleanField()
 
 class Game(models.Model):

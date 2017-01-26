@@ -1,8 +1,8 @@
 {% block content %}
 
-   <h2>Registration</h2>
+   <h2>Player Registration</h2>
 
-     <form action="/register" method="post">
+     <form action="/" method="post">
      {% csrf_token %}
      <p>
        <label for="id_first_name">First name:</label>
@@ -24,14 +24,22 @@
      <p>
        <label for="id_email">Email:</label>
        <input id="id_email" type="email" name="email"/>
-     </p><p>
+     </p>
+     <!--<p>
+       <label for="id_user_type">User type:</label>
+       <input id="id_user_type" type="radio" name="user_type" value="player">Player<br>
+       <input id="id_user_type" type="radio" name="user_type" value="developer">Developer<br>
+       <input id="id_user_type" type="radio" name="user_type" value="admin">Admin<br>
+     </p>-->
+
+     <!--<p>
        <label for="id_user_type">User type:</label>
        <select name="user_type">
          <option value="player">Player</option>
          <option value="developer">Developer</option>
          <option value="admin">Admin</option>
        </select>
-     </p>
+     </p>-->
 
      <!--{{form.as_p}} -->
      <input type="submit" value="Register" />
