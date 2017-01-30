@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Submit Games{% endblock %}
+{% block content %}
+
+<div class="container">
+   <h2>Submit Games</h2>
+
+    <div class="row">
+     <div class="col-md-6 col-sm-6 col-xs-12">
+      <form method="post">
+       <div class="form-group ">
+        <label class="control-label requiredField" for="name">
+         Game title
+         <span class="asteriskField">
+          *
+         </span>
+        </label>
+        <input class="form-control" id="name" name="name" placeholder="Name of your game" type="text"/>
+       </div>
+       <div class="form-group ">
+        <label class="control-label " for="message">
+         Description
+        </label>
+        <textarea class="form-control" cols="40" id="message" name="message" placeholder="Describe your game" rows="10"></textarea>
+       </div>
+       <div class="form-group ">
+        <label class="control-label requiredField" for="price">
+         Price
+         <span class="asteriskField">
+          *
+         </span>
+        </label>
+        <input class="form-control" id="price" name="price" placeholder="set your price" type="text"/>
+       </div>
+       <div class="form-group ">
+        <label class="control-label requiredField" for="url">
+         URL
+         <span class="asteriskField">
+          *
+         </span>
+        </label>
+        <input class="form-control" id="url" name="url" placeholder="Put the URL of your game here" type="text"/>
+       </div>
+       <div class="form-group ">
+        <label class="control-label " for="textarea">
+         Instruction
+        </label>
+        <textarea class="form-control" cols="40" id="textarea" name="textarea" placeholder="instruction on how to play your games" rows="10"></textarea>
+       </div>
+       <div class="form-group">
+        <div>
+         <button class="btn btn-primary " name="submit" type="submit">
+          Submit
+         </button>
+        </div>
+       </div>
+      </form>
+     </div>
+    </div>
+
+</div>
+{% endblock %}
