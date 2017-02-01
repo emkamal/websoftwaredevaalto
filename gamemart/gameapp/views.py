@@ -1,6 +1,7 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
 from gameapp.forms import UserForm
+from gameapp.models import *
 
 
 def home(request):
@@ -25,9 +26,20 @@ def register(request):
     return render(request, 'registration/register.html', {'form': user_form })
 
 def browse(request):
-    return render(request, 'browse.html')
+
+    try:
+        games = Game.objects.all()
+    except Game.DoesNotExist:
+        raise Http404("Game does not exist")
+
+    r = render (request, 'browse.html', {'games': games}, content_type='application/xhtml+xml')
+
+    return HttpResponse(r)
+
+    # return render(request, 'browse.html')
 
 def submit(request):
+
     return render(request, 'submit.html')
 
 def gameview(request, id):
