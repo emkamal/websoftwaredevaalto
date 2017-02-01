@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^login/$', auth_views.login, name='login'),
     url(r'^logout/$', auth_views.logout, {'template_name': 'registration/logged_out.html'}, name='logout'),
+    url(r'^registration/$', views.registration),
     url(r'^register/$', views.register),
     url(r'^browse/$', views.browse),
     url(r'^submit/$', views.submit),

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% block content %}
+
+<div class="container">
+   <h2>Player Registration</h2>
+
+     <form action="/register/" method="post">
+     {% csrf_token %}
+     <p>
+       <label for="id_first_name">First name:</label>
+       <input id="id_first_name" type="text" name="first_name"/>
+     </p>
+     <p>
+       <label for="id_last_name">Last name:</label>
+       <input id="id_last_name" type="text" name="last_name"/>
+     </p>
+     <p>
+       <label for="id_username">Username:</label>
+       <input id="id_username" type="text" name="username"/>
+     </p>
+     <p>
+       <label for="id_password">Password:</label>
+       <input id="id_password" type="password" name="password"/>
+     </p>
+     <p>
+       <label for="id_email">Email:</label>
+       <input id="id_email" type="email" name="email"/>
+     </p>
+
+     <input type="submit" value="Register" />
+
+</div>
+{% endblock %}
