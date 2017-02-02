@@ -1,6 +1,6 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
-from gameapp.forms import UserForm
+from gameapp.forms import UserForm,SubmitForm
 
 
 def home(request):
@@ -28,7 +28,12 @@ def browse(request):
     return render(request, 'browse.html')
 
 def submit(request):
-    return render(request, 'submit.html')
+    form = SubmitForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+    template = "submit.html"
+
+    return render(request, template)
 
 def gameview(request, id):
     return render(request, 'gameview.html')
