@@ -18,6 +18,7 @@ class Review(models.Model):
 
 #class User(models.Model):
 class User(AbstractUser):
+    slug = models.CharField(max_length=100)
     pic = models.ForeignKey('Asset')
     bio = models.TextField()
     register_date = models.DateTimeField()
@@ -28,6 +29,7 @@ class User(AbstractUser):
 class Game(models.Model):
     owner = models.ForeignKey('User')
     title = models.CharField(max_length=100)
+    slug = models.CharField(max_length=100)
     desc = models.TextField()
     instruction = models.TextField(blank=True)
     url = models.URLField()
