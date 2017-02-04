@@ -1,5 +1,5 @@
 from django.http import HttpResponse, Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import *
 # from gameapp.forms import UserForm, SubmitForm
 from gameapp.models import *
 
@@ -50,5 +50,10 @@ def submit(request):
 
     return render(request, 'submit.html')
 
-def gameview(request, id):
-    return render(request, 'gameview.html')
+def game_by_id(request, id):
+    game = get_object_or_404(Game, id=id)
+    return render(request, 'gameview.html', {'game': game})
+
+def game_by_slug(request, slug):
+    game = get_object_or_404(Game, slug=slug)
+    return render(request, 'gameview.html', {'game': game})

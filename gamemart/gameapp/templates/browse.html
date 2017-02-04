@@ -11,16 +11,16 @@
         </div>
     </div>
     <div id="products" class="row list-group">
-      {% for g in games %}
+      {% for game in games %}
         <div class="item  col-xs-4 col-lg-4">
             <div class="thumbnail">
                 <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
                 <div class="caption">
-                    <h4 class="group inner list-group-item-heading">{{ g.title }}</h4>
-                    <p class="group inner list-group-item-text">{{g.desc}}</p>
+                    <h4 class="group inner list-group-item-heading"><a href="{{BASE_URL}}/game/{{ game.slug }}">{{ game.title }}</a></h4>
+                    <p class="group inner list-group-item-text">{{game.desc}}</p>
                     <div class="row">
                         <div class="col-xs-12 col-md-6">
-                            <p class="lead">€ {{ g.price }}</p>
+                            <p class="lead">€ {{ game.price }}</p>
                         </div>
                         <div class="col-xs-12 col-md-6">
                             <a class="btn btn-success" href="http://www.jquery2dotnet.com">Add to cart</a>

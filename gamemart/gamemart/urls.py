@@ -14,5 +14,6 @@ urlpatterns = [
     url(r'^register/$', views.register),
     url(r'^browse/$', views.browse),
     url(r'^submit/$', views.submit),
-    url(r'^game/([0-9]+)/$', views.gameview),
+    url(r'^game/([0-9]+)/$', views.game_by_id),
+    url(r'^game/(?P<slug>[-\w]+)/$', views.game_by_slug, name='game_view'),
 ]
