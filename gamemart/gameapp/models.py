@@ -17,7 +17,9 @@ class Review(models.Model):
     review = models.TextField()
 
 #class User(models.Model):
-class User(AbstractUser):	slug = models.SlugField(max_length=100, unique=True)    pic = models.ForeignKey('Asset')
+class User(AbstractUser):
+    slug = models.SlugField(max_length=100, unique=True)
+    pic = models.ForeignKey('Asset')
     bio = models.TextField()
     register_date = models.DateTimeField()
     #user_type values are player, developer and admin
@@ -42,14 +44,14 @@ class Asset(models.Model):
     game = models.ForeignKey('Game', null=True, on_delete=models.CASCADE)
 
 class Gameplay(models.Model):
-    player_id = models.ForeignKey('User')
-    game_id = models.ForeignKey('Game')
+    player = models.ForeignKey('User', on_delete=models.CASCADE)
+    game = models.ForeignKey('Game', on_delete=models.CASCADE)
     score = models.FloatField(default=0)
     state = models.CharField(max_length=10)
     timestamp = models.DateTimeField(auto_now=True)
 
 class Purchase(models.Model):
-    buyer_id = models.ForeignKey('User')
-    game_id = models.ForeignKey('Game')
+    buyer = models.ForeignKey('User', on_delete=models.CASCADE)
+    game = models.ForeignKey('Game', on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now=True)
     amount = models.FloatField()
