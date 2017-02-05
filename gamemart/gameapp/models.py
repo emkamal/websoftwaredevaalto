@@ -6,6 +6,9 @@ class Taxonomy(models.Model):
     label = models.CharField(max_length=50)
     parent = models.ForeignKey('self',null=True,blank=True)
 
+    def __str__(self):
+        return u'%s' % (self.label)
+
 class Game_Taxonomy(models.Model):
     game = models.ForeignKey('Game')
     taxonomy = models.ForeignKey('Taxonomy')
@@ -15,6 +18,9 @@ class Review(models.Model):
     person = models.ForeignKey('User')
     rating = models.IntegerField()
     review = models.TextField()
+
+    def __str__(self):
+        return u'review by %s on %s' % (self.person, self.game)
 
 #class User(models.Model):
 class User(AbstractUser):
@@ -26,7 +32,7 @@ class User(AbstractUser):
     user_type = models.CharField(max_length=10,default='player')
     is_validated = models.BooleanField(default=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s %s' % (self.first_name, self.last_name)
 
 class Game(models.Model):
@@ -40,7 +46,7 @@ class Game(models.Model):
     added_date = models.DateTimeField(auto_now=True)
     is_featured = models.BooleanField(default=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s' % (self.title)
 
 class Asset(models.Model):

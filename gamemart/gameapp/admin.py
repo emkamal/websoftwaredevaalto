@@ -21,11 +21,11 @@ class UserAdmin(admin.ModelAdmin):
 admin.site.register(User,UserAdmin)
 
 class GameAdmin(admin.ModelAdmin):
-    list_display = ('title','owner')
+    list_display = ('id', 'title','owner')
 admin.site.register(Game, GameAdmin)
 
 class AssetAdmin(admin.ModelAdmin):
-    # list_display = ('title',)
+    list_display = ('game', 'url')
     pass
 admin.site.register(Asset,AssetAdmin)
 
