@@ -29,13 +29,13 @@ class User(AbstractUser):
 class Game(models.Model):
     owner = models.ForeignKey('User')
     title = models.CharField(max_length=100)
-	slug = models.SlugField(max_length=100, unique=True)    desc = models.TextField()
+    slug = models.SlugField(max_length=100, unique=True)
+    desc = models.TextField()
     instruction = models.TextField(blank=True)
     url = models.URLField()
     price = models.FloatField()
     added_date = models.DateTimeField(auto_now=True)
     is_featured = models.BooleanField(default=False)
-
 
 class Asset(models.Model):
     asset_type = models.CharField(max_length=50)
