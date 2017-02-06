@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser
 class Taxonomy(models.Model):
     taxonomy_type = models.CharField(max_length=20)
     label = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=50)
     parent = models.ForeignKey('self',null=True,blank=True)
 
     def __str__(self):
@@ -45,6 +46,7 @@ class Game(models.Model):
     price = models.FloatField()
     added_date = models.DateTimeField(auto_now=True)
     is_featured = models.BooleanField(default=False)
+    # banner = model.ImageField(upload_to='games')
 
     def __str__(self):
         return u'%s' % (self.title)
