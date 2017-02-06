@@ -1,7 +1,6 @@
 from django import forms
-from django.contrib.auth.models import User
-
-
+#from django.contrib.auth.models import User
+from gameapp.models import User, Game
 
 
 class UserForm(forms.ModelForm):
@@ -12,7 +11,7 @@ class UserForm(forms.ModelForm):
     model = User # We want to use User model ...
     # ... and the form should have the following fields
 
-    fields = ('first_name', 'last_name', 'username', 'password', 'email')
+    fields = ('first_name', 'last_name', 'username', 'password', 'email', 'slug')
     #fields = ('first_name', 'last_name', 'username', 'password', 'password', 'email', 'user_type',)
 
 

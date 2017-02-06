@@ -1,6 +1,6 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import *
-# from gameapp.forms import UserForm, SubmitForm
+from gameapp.forms import UserForm, SubmitForm
 from gameapp.models import *
 
 
@@ -37,7 +37,7 @@ def register(request):
         if user_form.is_valid():
             user = user_form.save()
             user.set_password(user.password)
-            user.user_type = 'player'
+            #user.user_type = 'player'
             user.save()
             return render(request, 'debug.html', {'user': user})    #this is for testing
             #return redirect('home_page')
