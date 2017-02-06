@@ -12,7 +12,7 @@ class Game_TaxonomyAdmin(admin.ModelAdmin):
 admin.site.register(Game_Taxonomy,Game_TaxonomyAdmin)
 
 class ReviewAdmin(admin.ModelAdmin):
-    # list_display = ('title',)
+    list_display = ('person','game','rating')
     pass
 admin.site.register(Review,ReviewAdmin)
 
@@ -21,7 +21,7 @@ class UserAdmin(admin.ModelAdmin):
 admin.site.register(User,UserAdmin)
 
 class GameAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title','owner')
+    list_display = ('id', 'title','owner','is_featured')
 admin.site.register(Game, GameAdmin)
 
 class AssetAdmin(admin.ModelAdmin):
