@@ -1,5 +1,8 @@
+body{
+  margin-top: 100px;
+}
 .jumbotron{
-  margin-top: -68px;
+  margin-top: -50px;
 }
 #gameframe{
   height: 600px;

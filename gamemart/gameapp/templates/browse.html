@@ -3,6 +3,7 @@
 {% block content %}
 {% load static %}
 <div class="container">
+  {% if games %}
     <div class="well well-sm">
         <strong>Category Title</strong>
         <div class="btn-group">
@@ -31,6 +32,9 @@
         </div>
       {% endfor %}
     </div>
+  {% else %}
+  <div class="well well-lg">Too bad we have no {{page_title}} games yet </div>
+  {% endif %}
 </div>
 
 

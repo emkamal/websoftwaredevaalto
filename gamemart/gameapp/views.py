@@ -94,14 +94,13 @@ def explore(request, type):
     return HttpResponse(r)
 
 def explore_by_taxonomy(request, tag):
-    taxonomy_type = request.path.split('/')[2]
-    page_title = Taxonomy.objects.get(slug=tag).label
-    games = {}
+    # taxonomy_type = request.path.split('/')[2]
+    target = Taxonomy.objects.get(slug=tag)
+    page_title = target.label
+    tag_id = target.id
 
-    if taxonomy_type == 'category':
-        games = load_games('featured')
-    elif taxonomy_type == 'tag':
-        games = load_games()
+    # games_exist = True
+    games = load_games('tag', tag)
 
     r = render (
         request,
@@ -126,8 +125,8 @@ def load_games(mode="all", tags="", num=3):
             games_querysets = Game.objects.filter(is_featured=True)[:num]
         elif mode == "latest":
             games_querysets = Game.objects.all()[:num]
-        elif mode == "tags":
-            games_querysets = Game.objects.all()[:num]
+        elif mode == "tag":
+            games_querysets = Game.objects.filter(taxonomy__slug=tags)
 
         for game in games_querysets:
 
