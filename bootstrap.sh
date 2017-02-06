@@ -166,3 +166,4 @@ echo "================================================"
 #virtualenv /vagrant/gamemart/gamemartenv
 #source /vagrant/gamemart/gamemartenv/bin/activate
 #/vagrant/gamemart/manage.py runserver 0.0.0.0:8000
+# sudo vim /var/log/apache2/error.log
