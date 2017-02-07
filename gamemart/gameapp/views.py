@@ -39,8 +39,8 @@ def register(request):
             user.set_password(user.password)
             #user.user_type = 'player'
             user.save()
-            return render(request, 'debug.html', {'user': user})    #this is for testing
-            #return redirect('home_page')
+            #return render(request, 'debug.html', {'user': user})    #this is for testing
+            return redirect('home_page')
     else:
         user_form = UserForm()
     return render(request, 'register.html', {'form': user_form })
