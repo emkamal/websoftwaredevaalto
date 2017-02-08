@@ -14,6 +14,8 @@ urlpatterns = [
     url(r'^accounts/profile/$', views.home),
     url(r'^logout/$', auth_views.logout, {'template_name': 'registration/logged_out.html'}, name='logout'),
     url(r'^registration/$', views.registration),
+    url(r'^registrationDeveloper/$', views.registrationDeveloper),
+    url(r'^registrationAdmin/$', views.registrationAdmin),
     url(r'^register/$', views.register),
     url(r'^games/$', views.browse),
     url(r'^games/(?P<type>[-\w]+)/$', views.explore, name='explore'),

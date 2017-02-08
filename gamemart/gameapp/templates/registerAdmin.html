@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="container">
-   <h2>Player Registration</h2>
+   <h2>Admin Registration</h2>
 
      <form action="/register/" method="post">
      {% csrf_token %}
@@ -27,8 +27,11 @@
        <label for="id_email">Email:</label>
        <input id="id_email" type="email" name="email"/>
      </p>
-
-     <input id="id_slug" type="hidden" name="slug" value="etunimirrrrrrrr"/>
+     <p>
+       <label for="id_user_type">Type:</label>
+       <input id="id_user_type" type="text" name="user_type" value="admin"/>
+     </p>
+     <input id="id_slug" type="hidden" name="slug" value="eelkdlelsldldkldslkhhjjjjjj"/>
 
 
      <input type="submit" value="Register" />

@@ -31,6 +31,12 @@ def login(request):
 def registration(request):
     return render(request, 'register.html', {})
 
+def registrationDeveloper(request):
+    return render(request, 'registerDeveloper.html', {})
+
+def registrationAdmin(request):
+    return render(request, 'registerAdmin.html', {})
+
 def register(request):
     if request.method == 'POST':
         user_form = UserForm(data=request.POST)
