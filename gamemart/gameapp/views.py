@@ -7,8 +7,8 @@ from hashlib import md5
 
 
 def home(request):
-    featured_games = load_games('featured', '', 3)
-    latest_games = load_games('latest', '', 4)
+    featured_games = load_games(request, 'featured', '', 3)
+    latest_games = load_games(request, 'latest', '', 4)
     r = render (
         request,
         'home.html',
