@@ -7,15 +7,7 @@
     {% endblock %}
   </head>
   <body>
-
     {% include "nav.html" %}
-
-    <div class="jumbotron">
-      <div class='container'>
-        <h1>{{ page_title }}</h1>
-        <p>{{ page_subtitle }}</p>
-      </div>
-    </div>
 
     {% block content %}
     <div class="starter-template">
@@ -25,7 +17,6 @@
     {% endblock %}
 
     {% include "footer.html" %}
-
 
     {% block footer_script %}
     {% endblock %}

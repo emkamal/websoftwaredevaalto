@@ -2,6 +2,8 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import *
 from gameapp.forms import UserForm, SubmitForm
 from gameapp.models import *
+from django.conf import settings
+from hashlib import md5
 
 
 def home(request):
@@ -52,7 +54,7 @@ def register(request):
     return render(request, 'register.html', {'form': user_form })
 
 def browse(request):
-    games = load_games('featured')
+    games = load_games(request, 'featured')
 
     r = render (
         request,
@@ -70,19 +72,19 @@ def browse(request):
 def explore(request, type):
     if type == 'featured':
         page_title = 'Featured'
-        games = load_games('featured')
+        games = load_games(request, 'featured')
     elif type == 'latest':
         page_title = 'Latest'
-        games = load_games()
+        games = load_games(request)
     elif type == 'top-rated':
         page_title = 'Top Rated'
-        games = load_games()
+        games = load_games(request)
     elif type == 'top-grossing':
         page_title = 'Top Grossing'
-        games = load_games()
+        games = load_games(request)
     elif type == 'most-played':
         page_title = 'Most Played'
-        games = load_games()
+        games = load_games(request)
     else:
         raise Http404
 
@@ -106,7 +108,7 @@ def explore_by_taxonomy(request, tag):
     tag_id = target.id
 
     # games_exist = True
-    games = load_games('tag', tag)
+    games = load_games('tag', tag_id)
 
     r = render (
         request,
@@ -121,8 +123,17 @@ def explore_by_taxonomy(request, tag):
 
     return HttpResponse(r)
 
-def load_games(mode="all", tags="", num=3):
+def load_games(request, mode="all", tags="", num=3):
     # all, featured, latest, tags,
+
+    user_owner_games = [];
+
+    if(request.user.is_authenticated()):
+        user_purchases = Purchase.objects.filter(buyer_id=request.user.id)
+        if user_purchases.exists():
+            for user_purchase in user_purchases:
+                user_owner_games.append(user_purchase.game_id)
+
     try:
         games = {}
         if mode == "all":
@@ -132,7 +143,7 @@ def load_games(mode="all", tags="", num=3):
         elif mode == "latest":
             games_querysets = Game.objects.all()[:num]
         elif mode == "tag":
-            games_querysets = Game.objects.filter(taxonomy__slug=tags)
+            games_querysets = Game.objects.filter(game_taxonomy=tags)
 
         for game in games_querysets:
 
@@ -142,7 +153,21 @@ def load_games(mode="all", tags="", num=3):
                     game_banner_url = asset.url
                     break
 
-            games[game.id] = { 'title': game.title, 'price': game.price, 'desc': game.desc, 'slug': game.slug, 'banner_url': game_banner_url }
+            if game.id in user_owner_games:
+                game_bought = True
+            else:
+                game_bought = False
+
+            games[game.id] = {
+                'id': game.id,
+                'title': game.title,
+                'price': game.price,
+                'desc': game.desc,
+                'slug': game.slug,
+                'banner_url': game_banner_url,
+                'bought': game_bought,
+                'a': user_owner_games
+            }
 
         return games
 
@@ -158,8 +183,38 @@ def submit(request):
 
 def game_by_id(request, id):
     game = get_object_or_404(Game, id=id)
-    return render(request, 'gameview.html', {'game': game})
+
+    purchase = Purchase.objects.latest('id')
+    next_purchase_id = purchase.id+1;
+
+    checksumstr = "pid={}&sid={}&amount={}&token={}".format(next_purchase_id, SELLER_ID, game.price, PAYMENT_SECRET_KEY)
+    checksum = md5(checksumstr.encode("ascii")).hexdigest()
+
+    return render(request, 'gameview.html', {'game': game, 'next_purchase_id': next_purchase_id, 'page_title': game.title, 'checksum': checksum})
 
 def game_by_slug(request, slug):
     game = get_object_or_404(Game, slug=slug)
-    return render(request, 'gameview.html', {'game': game})
+
+    game_bought = False
+
+    if(request.user.is_authenticated()):
+        user_purchases = Purchase.objects.filter(buyer_id=request.user.id)
+        if user_purchases.exists():
+            for user_purchase in user_purchases:
+                if user_purchase.game_id == game.id and user_purchase.state == 'success' :
+                    game_bought = True
+
+    purchase = Purchase.objects.latest('id')
+    next_purchase_id = purchase.id+1;
+
+    checksumstr = "pid={}&sid={}&amount={}&token={}".format(next_purchase_id, settings.SELLER_ID, game.price, settings.PAYMENT_SECRET_KEY)
+    checksum = md5(checksumstr.encode("ascii")).hexdigest()
+
+    return render(request, 'gameview.html', {'game': game, 'next_purchase_id': next_purchase_id, 'page_title': game.title, 'checksum': checksum, 'game_bought': game_bought})
+
+def payment(request, status, slug):
+    game = get_object_or_404(Game, slug=slug)
+    purchase = Purchase(amount=game.price, buyer_id=request.user.id, game_id=game.id, status=status)
+    purchase.save()
+
+    return render(request, 'payment.html', {'status': status})
