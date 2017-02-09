@@ -7,8 +7,8 @@ from hashlib import md5
 
 
 def home(request):
-    featured_games = load_games('featured', '', 3)
-    latest_games = load_games('latest', '', 4)
+    featured_games = load_games(request, 'featured', '', 3)
+    latest_games = load_games(request, 'latest', '', 4)
     r = render (
         request,
         'home.html',
@@ -48,7 +48,7 @@ def register(request):
             #user.user_type = 'player'
             user.save()
             #return render(request, 'debug.html', {'user': user})    #this is for testing
-            return redirect('login')
+            return redirect('home_page')
     else:
         user_form = UserForm()
     return render(request, 'register.html', {'form': user_form })

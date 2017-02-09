@@ -99,6 +99,7 @@
 
         {% if user.is_authenticated %}
           <li><a href="{{BASE_URL}}/user/{{ user.slug }}">Hi there, {{user.first_name}}</a></li>
+          <li><a href="{{BASE_URL}}/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
         {% else %}
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Register</b> <span class="caret"></span></a>
