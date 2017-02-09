@@ -109,7 +109,6 @@ def explore_by_taxonomy(request, tag):
 
     # games_exist = True
     games = load_games('tag', tag_id)
-
     r = render (
         request,
         'browse.html',
@@ -122,6 +121,7 @@ def explore_by_taxonomy(request, tag):
     )
 
     return HttpResponse(r)
+
 
 def load_games(request, mode="all", tags="", num=3):
     # all, featured, latest, tags,
@@ -173,6 +173,7 @@ def load_games(request, mode="all", tags="", num=3):
 
     except Game.DoesNotExist:
         raise Http404("Game does not exist")
+
 
 def submit(request):
     form = SubmitForm(request.POST or None)
