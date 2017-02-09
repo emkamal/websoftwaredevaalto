@@ -2,6 +2,8 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import *
 from gameapp.forms import UserForm, SubmitForm
 from gameapp.models import *
+from django.conf import settings
+from hashlib import md5
 
 
 def home(request):
@@ -158,8 +160,38 @@ def submit(request):
 
 def game_by_id(request, id):
     game = get_object_or_404(Game, id=id)
-    return render(request, 'gameview.html', {'game': game, 'page_title': game.title})
+
+    purchase = Purchase.objects.latest('id')
+    next_purchase_id = purchase.id+1;
+
+    checksumstr = "pid={}&sid={}&amount={}&token={}".format(next_purchase_id, SELLER_ID, game.price, PAYMENT_SECRET_KEY)
+    checksum = md5(checksumstr.encode("ascii")).hexdigest()
+
+    return render(request, 'gameview.html', {'game': game, 'next_purchase_id': next_purchase_id, 'page_title': game.title, 'checksum': checksum})
 
 def game_by_slug(request, slug):
     game = get_object_or_404(Game, slug=slug)
-    return render(request, 'gameview.html', {'game': game, 'page_title': game.title})
+
+    game_bought = False
+
+    if(request.user.is_authenticated()):
+        user_purchases = Purchase.objects.filter(buyer_id=request.user.id)
+        if user_purchases.exists():
+            for user_purchase in user_purchases:
+                if user_purchase.game_id == game.id and user_purchase.state == 'success' :
+                    game_bought = True
+
+    purchase = Purchase.objects.latest('id')
+    next_purchase_id = purchase.id+1;
+
+    checksumstr = "pid={}&sid={}&amount={}&token={}".format(next_purchase_id, settings.SELLER_ID, game.price, settings.PAYMENT_SECRET_KEY)
+    checksum = md5(checksumstr.encode("ascii")).hexdigest()
+
+    return render(request, 'gameview.html', {'game': game, 'next_purchase_id': next_purchase_id, 'page_title': game.title, 'checksum': checksum, 'game_bought': game_bought})
+
+def payment(request, status, slug):
+    game = get_object_or_404(Game, slug=slug)
+    purchase = Purchase(amount=game.price, buyer_id=request.user.id, game_id=game.id, status=status)
+    purchase.save()
+
+    return render(request, 'payment.html', {'status': status})

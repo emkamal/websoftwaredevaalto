@@ -2,7 +2,7 @@
 
 
 <div class="container">
-  {% if user.is_authenticated %}
+  {% if game_bought %}
     <div class="row">
         <div class="col-md-12">
             <iframe id="gameframe" width="100%" height="100%" src="{{ game.url }}"></iframe>
@@ -59,10 +59,35 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-8">
             <p>{{ game.desc }}</p>
+            {% if user.is_authenticated %}
             <h2>Instruction</h2>
             <p>{{ game.instruction }}</p>
+            {% endif %}
+        </div>
+        {% if not game_bought %}
+        <div class="col-md-4 text-right">
+          {# {% if not user.is_authenticated %}#}
+            <h3>€ {{ game.price }}</h3>
+
+            <form action="http://payments.webcourse.niksula.hut.fi/pay/" method="POST">
+                <input type="hidden" name="pid" value="{{next_purchase_id}}" />
+                <input type="hidden" name="sid" value="kamalopidayo" />
+                <input type="hidden" name="success_url"
+                        value="{{BASE_URL}}/payment/success/on/{{game.slug}}" />
+                <input type="hidden" name="cancel_url"
+                        value="{{BASE_URL}}/payment/canceled/on/{{game.slug}}" />
+                <input type="hidden" name="error_url"
+                        value="{{BASE_URL}}/payment/error/on/{{game.slug}}" />
+                <input type="hidden" name="checksum"
+                        value="{{checksum}}" />
+                <input type="hidden" id="id_amount" name="amount" value="{{ game.price }}" />
+                <!-- <input type="submit" value="Accept Payment"/> -->
+                <input class="btn btn-primary" type="submit" value="Buy">
+            </form>
+
+          {% endif %}
         </div>
     </div>
 </div>

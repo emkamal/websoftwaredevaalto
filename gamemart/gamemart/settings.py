@@ -70,6 +70,7 @@ TEMPLATES = [
     },
 ]
 TEMPLATES[0]['OPTIONS']['context_processors'].append("gameapp.context_processors.load_taxonomies")
+TEMPLATES[0]['OPTIONS']['context_processors'].append("gameapp.context_processors.load_config")
 
 WSGI_APPLICATION = 'gamemart.wsgi.application'
 
@@ -130,3 +131,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+BASE_URL = 'http://192.168.5.5'
+PAYMENT_SECRET_KEY = '09f8b39217904623a8c303f11ac74b13';
+SELLER_ID = 'kamalopidayo'
