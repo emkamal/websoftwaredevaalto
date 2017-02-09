@@ -1,12 +1,14 @@
-{% extends "base.html" %} {% block title %}Play games{% endblock %} {% block content %}
+{% extends "base_without_jumbotron.html" %} {% block title %}{{ game.title }}{% endblock %} {% block content %}
 
 
 <div class="container">
+  {% if user.is_authenticated %}
     <div class="row">
         <div class="col-md-12">
             <iframe id="gameframe" width="100%" height="100%" src="{{ game.url }}"></iframe>
         </div>
     </div>
+    {% endif %}
     <div class="row">
         <div class="col-md-10">
             <h1>{{ game.title }}</h1>

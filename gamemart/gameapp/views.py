@@ -106,7 +106,7 @@ def explore_by_taxonomy(request, tag):
     tag_id = target.id
 
     # games_exist = True
-    games = load_games('tag', tag)
+    games = load_games('tag', tag_id)
 
     r = render (
         request,
@@ -132,7 +132,7 @@ def load_games(mode="all", tags="", num=3):
         elif mode == "latest":
             games_querysets = Game.objects.all()[:num]
         elif mode == "tag":
-            games_querysets = Game.objects.filter(taxonomy__slug=tags)
+            games_querysets = Game.objects.filter(game_taxonomy=tags)
 
         for game in games_querysets:
 
@@ -158,8 +158,8 @@ def submit(request):
 
 def game_by_id(request, id):
     game = get_object_or_404(Game, id=id)
-    return render(request, 'gameview.html', {'game': game})
+    return render(request, 'gameview.html', {'game': game, 'page_title': game.title})
 
 def game_by_slug(request, slug):
     game = get_object_or_404(Game, slug=slug)
-    return render(request, 'gameview.html', {'game': game})
+    return render(request, 'gameview.html', {'game': game, 'page_title': game.title})
