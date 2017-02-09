@@ -54,7 +54,7 @@ def register(request):
     return render(request, 'register.html', {'form': user_form })
 
 def browse(request):
-    games = load_games('featured')
+    games = load_games(request, 'featured')
 
     r = render (
         request,
@@ -72,19 +72,19 @@ def browse(request):
 def explore(request, type):
     if type == 'featured':
         page_title = 'Featured'
-        games = load_games('featured')
+        games = load_games(request, 'featured')
     elif type == 'latest':
         page_title = 'Latest'
-        games = load_games()
+        games = load_games(request)
     elif type == 'top-rated':
         page_title = 'Top Rated'
-        games = load_games()
+        games = load_games(request)
     elif type == 'top-grossing':
         page_title = 'Top Grossing'
-        games = load_games()
+        games = load_games(request)
     elif type == 'most-played':
         page_title = 'Most Played'
-        games = load_games()
+        games = load_games(request)
     else:
         raise Http404
 
@@ -123,8 +123,17 @@ def explore_by_taxonomy(request, tag):
 
     return HttpResponse(r)
 
-def load_games(mode="all", tags="", num=3):
+def load_games(request, mode="all", tags="", num=3):
     # all, featured, latest, tags,
+
+    user_owner_games = [];
+
+    if(request.user.is_authenticated()):
+        user_purchases = Purchase.objects.filter(buyer_id=request.user.id)
+        if user_purchases.exists():
+            for user_purchase in user_purchases:
+                user_owner_games.append(user_purchase.game_id)
+
     try:
         games = {}
         if mode == "all":
@@ -144,7 +153,21 @@ def load_games(mode="all", tags="", num=3):
                     game_banner_url = asset.url
                     break
 
-            games[game.id] = { 'title': game.title, 'price': game.price, 'desc': game.desc, 'slug': game.slug, 'banner_url': game_banner_url }
+            if game.id in user_owner_games:
+                game_bought = True
+            else:
+                game_bought = False
+
+            games[game.id] = {
+                'id': game.id,
+                'title': game.title,
+                'price': game.price,
+                'desc': game.desc,
+                'slug': game.slug,
+                'banner_url': game_banner_url,
+                'bought': game_bought,
+                'a': user_owner_games
+            }
 
         return games
 
