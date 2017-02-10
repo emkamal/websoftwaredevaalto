@@ -1,9 +1,13 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import *
-from gameapp.forms import UserForm, SubmitForm
+#from gameapp.forms import UserForm
 from gameapp.models import *
 from django.conf import settings
 from hashlib import md5
+from django.shortcuts import render
+from django.contrib.auth import authenticate, login
+from .forms import LoginForm, SubmitForm
+from django.contrib.auth.decorators import login_required
 
 
 def home(request):
@@ -24,10 +28,35 @@ def home(request):
     return HttpResponse(r)
     # return HttpResponse('home_page')
 
-def login(request):
+def user_login(request):
+    if request.method == 'POST':
+        form =  LoginForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            user = authenticate(username=cd['username'],
+                    password=cd['password'])
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return HttpResponse('Authenticated '\
+                            'successfully')
+            else:
+                return HttpResponse('Disabled account')
+        else:
+            return HttpResponse('Invalid login')
+    else:
+        form = LoginForm()
+    return render(request, 'account/login.html', {'form':form})
+
+@login_required
+def dashboard(request):
+    return render(request, 'account/dashboard.html', {'section':'dashboard'})
+
+
+#def login(request):
     # return render(request, 'home.html')
     # return HttpResponse('login_page')
-    return render(request, 'home.html', {})
+    #return render(request, 'home.html', {})
     #return HttpResponse('home_page')
 
 def registration(request):
