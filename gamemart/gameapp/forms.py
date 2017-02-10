@@ -6,9 +6,14 @@ from django.utils.text import slugify
 from gameapp.models import User, Game
 
 
-class UserForm(forms.ModelForm):
+#class UserForm(forms.ModelForm):
     # use password widget so password isn't shown
-    password = forms.CharField(widget=forms.PasswordInput())
+    #password = forms.CharField(widget=forms.PasswordInput())
+
+class LoginForm(forms.Form):
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
+
 
     class Meta:
         model = User # We want to use User model ...
