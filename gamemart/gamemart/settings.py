@@ -33,13 +33,13 @@ ALLOWED_HOSTS = ["192.168.5.5", "127.0.0.1", "localhost"]
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'gameapp',
+    'django.contrib.admin',
 ]
 
 MIDDLEWARE = [
@@ -135,3 +135,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 BASE_URL = 'http://192.168.5.5'
 PAYMENT_SECRET_KEY = '09f8b39217904623a8c303f11ac74b13';
 SELLER_ID = 'kamalopidayo'
+
+from django.core.urlresolvers import reverse_lazy
+
+LOGIN_REDIRECT_URL = reverse_lazy('dashboard')
+LOGIN_URL = reverse_lazy('login')
+LOGIN_URL = reverse_lazy('logout')

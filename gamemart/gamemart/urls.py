@@ -5,6 +5,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.views import logout_then_login
 from gameapp import views
 
 urlpatterns = [
@@ -12,7 +13,8 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^login/$', auth_views.login, name='login'),
     url(r'^accounts/profile/$', views.home),
-    url(r'^logout/$', auth_views.logout, {'template_name': 'registration/logged_out.html'}, name='logout'),
+    #url(r'^logout/$', auth_views.logout, name='logout'),
+    url(r'^logout/$', lambda request: logout_then_login(request, "/"), name='logout'),
     url(r'^registration/$', views.registration),
     url(r'^registrationDeveloper/$', views.registrationDeveloper),
     url(r'^registrationAdmin/$', views.registrationAdmin),

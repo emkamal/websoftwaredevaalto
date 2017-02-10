@@ -6,9 +6,14 @@ from django.utils.text import slugify
 from gameapp.models import User, Game
 
 
-class UserForm(forms.ModelForm):
+#class UserForm(forms.ModelForm):
     # use password widget so password isn't shown
-    password = forms.CharField(widget=forms.PasswordInput())
+    #password = forms.CharField(widget=forms.PasswordInput())
+
+class LoginForm(forms.Form):
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
+
 
     class Meta:
         model = User # We want to use User model ...
@@ -20,7 +25,8 @@ class UserForm(forms.ModelForm):
     def save(self):
         instance = super(UserForm, self).save(commit=False)
 
-        instance.slug = orig = slugify(instance.username)
+        #instance.slug = orig = slugify(instance.first_name)
+        instance.slug = orig = '-'.join((slugify(instance.first_name), slugify(instance.last_name)))
 
         for x in itertools.count(1):
             if not User.objects.filter(slug=instance.slug).exists():

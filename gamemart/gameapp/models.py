@@ -69,4 +69,4 @@ class Purchase(models.Model):
     game = models.ForeignKey('Game', on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now=True)
     amount = models.FloatField()
-    state = models.CharField(max_length=50, default='error')
+    status = models.CharField(max_length=50, default='error')
