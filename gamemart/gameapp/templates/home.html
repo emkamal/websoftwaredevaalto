@@ -46,7 +46,12 @@
                                   </div>
                                   <div class="separator clear-left">
                                       <p class="btn-add">
-                                          <i class="fa fa-shopping-cart"></i><a href="http://www.jquery2dotnet.com" class="hidden-sm">Add to cart</a></p>
+                                        {% if not game.bought %}
+                                          <i class="fa fa-shopping-cart"></i><a href="http://www.jquery2dotnet.com" class="hidden-sm">Buy</a>
+                                        {% else %}
+                                          <i class="fa fa-play"></i><a href="{{BASE_URL}}/game/{{ game.slug }}" class="hidden-sm">Play</a>
+                                        {% endif %}
+                                      </p>
                                       <p class="btn-details">
                                           <i class="fa fa-list"></i><a href="{{BASE_URL}}/game/{{ game.slug }}" class="hidden-sm">More details</a></p>
                                   </div>

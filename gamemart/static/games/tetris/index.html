@@ -25,7 +25,7 @@
         <![endif]-->
 
         <!-- Add your site or application content here -->
-        <div class="game" style="width:350px; height:600px; margin: auto"></div>
+        <div class="game" style="width:350px; height:595px; margin: auto"></div>
 
         <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.1.1.min.js"><\/script>')</script>
@@ -35,8 +35,12 @@
             $('.game').blockrain({
               // autoplay: true,
               // autoplayRestart: true
-              theme: 'candy'
+              theme: 'candy',
+              onGameOver: function(score){
+                parent.postMessage({'status': 'gameOver', 'score': score}, '*');
+              }
             });
+
         </script>
     </body>
 </html>
