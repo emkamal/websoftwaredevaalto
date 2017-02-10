@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^game/([0-9]+)/$', views.game_by_id),
     url(r'^game/(?P<slug>[-\w]+)/$', views.game_by_slug, name='game_view'),
     url(r'^payment/(?P<status>[-\w]+)/on/(?P<slug>[-\w]+)/$', views.payment),
+    url(r'^api/(?P<target>[-\w]+)/$', views.api),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -4,6 +4,7 @@ from gameapp.forms import UserForm, SubmitForm
 from gameapp.models import *
 from django.conf import settings
 from hashlib import md5
+import json
 
 
 def home(request):
@@ -218,3 +219,42 @@ def payment(request, status, slug):
     purchase.save()
 
     return render(request, 'payment.html', {'status': status})
+
+def api(request, target):
+    output = {}
+
+    if target == 'game':
+        target_model = Game
+    elif target == 'user':
+        target_model = User
+    elif target == 'gameplay':
+        target_model = Gameplay
+    else:
+        return HttpResponse('{}', content_type="application/json")
+
+    if request.method == 'GET':
+        objects = target_model.objects.all();
+
+        i = 0
+        for obj in objects:
+            if target == 'game':
+                output[i] = {
+                    'id': obj.id,
+                    'title': obj.title,
+                    'price': obj.price,
+                }
+            elif target == 'user':
+                output[i] = {
+                    'id': obj.id,
+                    'first_name': obj.first_name,
+                    'last_name': obj.last_name,
+                }
+
+            i = i+1
+
+        json_dump = json.dumps(output)
+
+        return HttpResponse(json_dump, content_type="application/json")
+
+    elif request.method == 'POST':
+        pass
