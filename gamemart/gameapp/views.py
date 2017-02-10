@@ -257,4 +257,16 @@ def api(request, target):
         return HttpResponse(json_dump, content_type="application/json")
 
     elif request.method == 'POST':
-        pass
+        data = request.POST
+        if target == 'gameplay':
+            try:
+                g = Gameplay(score=data.get('score'), state=data.get('state'), game_id=data.get('game_id'), player_id=request.user.id)
+                g.save()
+                return HttpResponse('success', content_type="application/json")
+            except Gameplay.DoesNotExist:
+                raise Http404("Gameplay does not exist")
+            except Exception as e:
+                return HttpResponse(e, content_type="application/json")
+
+        else:
+            return HttpResponse(target, content_type="application/json")

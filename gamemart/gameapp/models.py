@@ -60,8 +60,8 @@ class Asset(models.Model):
 class Gameplay(models.Model):
     player = models.ForeignKey('User', on_delete=models.CASCADE)
     game = models.ForeignKey('Game', on_delete=models.CASCADE)
-    score = models.FloatField(default=0)
-    state = models.CharField(max_length=10)
+    score = models.FloatField(default=0, null=True, blank=True)
+    state = models.CharField(max_length=10, null=True, blank=True)
     timestamp = models.DateTimeField(auto_now=True)
 
 class Purchase(models.Model):

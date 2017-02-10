@@ -37,7 +37,7 @@
               // autoplayRestart: true
               theme: 'candy',
               onGameOver: function(score){
-                parent.postMessage({'status': 'gameOver', 'score': score}, '*');
+                parent.postMessage({'state': 'gameOver', 'score': score}, '*');
               }
             });
 
