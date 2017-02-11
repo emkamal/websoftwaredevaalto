@@ -33,7 +33,6 @@ ALLOWED_HOSTS = ["192.168.5.5", "127.0.0.1", "localhost"]
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -41,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'social.apps.django_app.default',
     'gameapp',
+    'django.contrib.admin',
 ]
 
 MIDDLEWARE = [

@@ -5,7 +5,7 @@
   {% if game_bought %}
     <div class="row">
         <div class="col-md-12">
-            <iframe id="gameframe" width="100%" height="100%" src="{{ game.url }}"></iframe>
+            <iframe id="gameframe" width="100%" height="100%" src="{{ game.url }}" data-gameid="{{game.id}}"></iframe>
         </div>
     </div>
     {% endif %}

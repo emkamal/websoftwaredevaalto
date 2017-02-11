@@ -1,10 +1,14 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import *
-from gameapp.forms import UserForm, SubmitForm
+#from gameapp.forms import UserForm
 from gameapp.models import *
 from django.conf import settings
 from hashlib import md5
-
+from django.shortcuts import render
+from django.contrib.auth import authenticate, login
+from .forms import LoginForm, SubmitForm
+from django.contrib.auth.decorators import login_required
+import json
 
 def home(request):
     featured_games = load_games(request, 'featured', '', 3)
@@ -24,10 +28,35 @@ def home(request):
     return HttpResponse(r)
     # return HttpResponse('home_page')
 
-def login(request):
+def user_login(request):
+    if request.method == 'POST':
+        form =  LoginForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            user = authenticate(username=cd['username'],
+                    password=cd['password'])
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return HttpResponse('Authenticated '\
+                            'successfully')
+            else:
+                return HttpResponse('Disabled account')
+        else:
+            return HttpResponse('Invalid login')
+    else:
+        form = LoginForm()
+    return render(request, 'account/login.html', {'form':form})
+
+@login_required
+def dashboard(request):
+    return render(request, 'account/dashboard.html', {'section':'dashboard'})
+
+
+#def login(request):
     # return render(request, 'home.html')
     # return HttpResponse('login_page')
-    return render(request, 'home.html', {})
+    #return render(request, 'home.html', {})
     #return HttpResponse('home_page')
 
 def registration(request):
@@ -202,7 +231,7 @@ def game_by_slug(request, slug):
         user_purchases = Purchase.objects.filter(buyer_id=request.user.id)
         if user_purchases.exists():
             for user_purchase in user_purchases:
-                if user_purchase.game_id == game.id and user_purchase.state == 'success' :
+                if user_purchase.game_id == game.id and user_purchase.status == 'success' :
                     game_bought = True
 
     purchase = Purchase.objects.latest('id')
@@ -219,3 +248,54 @@ def payment(request, status, slug):
     purchase.save()
 
     return render(request, 'payment.html', {'status': status})
+
+def api(request, target):
+    output = {}
+
+    if target == 'game':
+        target_model = Game
+    elif target == 'user':
+        target_model = User
+    elif target == 'gameplay':
+        target_model = Gameplay
+    else:
+        return HttpResponse('{}', content_type="application/json")
+
+    if request.method == 'GET':
+        objects = target_model.objects.all();
+
+        i = 0
+        for obj in objects:
+            if target == 'game':
+                output[i] = {
+                    'id': obj.id,
+                    'title': obj.title,
+                    'price': obj.price,
+                }
+            elif target == 'user':
+                output[i] = {
+                    'id': obj.id,
+                    'first_name': obj.first_name,
+                    'last_name': obj.last_name,
+                }
+
+            i = i+1
+
+        json_dump = json.dumps(output)
+
+        return HttpResponse(json_dump, content_type="application/json")
+
+    elif request.method == 'POST':
+        data = request.POST
+        if target == 'gameplay':
+            try:
+                g = Gameplay(score=data.get('score'), state=data.get('state'), game_id=data.get('game_id'), player_id=request.user.id)
+                g.save()
+                return HttpResponse('success', content_type="application/json")
+            except Gameplay.DoesNotExist:
+                raise Http404("Gameplay does not exist")
+            except Exception as e:
+                return HttpResponse(e, content_type="application/json")
+
+        else:
+            return HttpResponse(target, content_type="application/json")
