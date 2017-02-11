@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'social.apps.django_app.default',
     'gameapp',
 ]
 
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'gamemart.urls'
@@ -65,6 +67,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social.apps.django_app.context_processors.backends',
+                'social.apps.django_app.context_processors.login_redirect',
             ],
         },
     },
@@ -73,6 +77,18 @@ TEMPLATES[0]['OPTIONS']['context_processors'].append("gameapp.context_processors
 TEMPLATES[0]['OPTIONS']['context_processors'].append("gameapp.context_processors.load_config")
 
 WSGI_APPLICATION = 'gamemart.wsgi.application'
+
+AUTHENTICATION_BACKENDS = (
+    'social.backends.github.GithubOAuth2',
+    'social.backends.twitter.TwitterOAuth',
+    'social.backends.facebook.FacebookOAuth2',
+
+    #'django.contrib.auth.backends.ModelBackend',
+)
+
+#this maybe to separate configuration from settings
+SOCIAL_AUTH_GITHUB_KEY = 'a1e04b93197074ce03d5'
+SOCIAL_AUTH_GITHUB_SECRET = '0864e23c966bdb4f2900afb55973bb1cf5e5066a'
 
 
 # Database
@@ -135,3 +151,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 BASE_URL = 'http://192.168.5.5'
 PAYMENT_SECRET_KEY = '09f8b39217904623a8c303f11ac74b13';
 SELLER_ID = 'kamalopidayo'
+
+from django.core.urlresolvers import reverse_lazy
+
+LOGIN_REDIRECT_URL = reverse_lazy('dashboard')
+LOGIN_URL = reverse_lazy('login')
+LOGIN_URL = reverse_lazy('logout')
