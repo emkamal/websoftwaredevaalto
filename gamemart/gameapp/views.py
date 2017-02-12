@@ -262,24 +262,48 @@ def api(request, target):
         return HttpResponse('{}', content_type="application/json")
 
     if request.method == 'GET':
+
         objects = target_model.objects.all();
 
-        i = 0
-        for obj in objects:
-            if target == 'game':
-                output[i] = {
-                    'id': obj.id,
-                    'title': obj.title,
-                    'price': obj.price,
-                }
-            elif target == 'user':
-                output[i] = {
-                    'id': obj.id,
-                    'first_name': obj.first_name,
-                    'last_name': obj.last_name,
-                }
+        if target == 'gameplay' and request.GET.get("game_id") is not None:
+            objects = objects.filter(game_id=request.GET.get("game_id"), player_id=request.user.id).latest('timestamp')
 
-            i = i+1
+        try:
+            _ = (e for e in objects)
+        except TypeError:
+            output = {
+                'id': objects.id,
+                'score': objects.score,
+                'state': objects.state,
+                'game_id': objects.game_id,
+                'player_id': objects.player_id,
+            }
+        else:
+            i = 0
+            for obj in objects:
+                if target == 'game':
+                    output[i] = {
+                        'id': obj.id,
+                        'title': obj.title,
+                        'price': obj.price,
+                    }
+                elif target == 'user':
+                    output[i] = {
+                        'id': obj.id,
+                        'first_name': obj.first_name,
+                        'last_name': obj.last_name,
+                    }
+                elif target == 'gameplay':
+                    output[i] = {
+                        'id': obj.id,
+                        'score': obj.score,
+                        'state': obj.state,
+                        # 'timestamp': obj.timestamp,
+                        'game_id': obj.game_id,
+                        'player_id': obj.player_id,
+                    }
+
+                i = i+1
 
         json_dump = json.dumps(output)
 
