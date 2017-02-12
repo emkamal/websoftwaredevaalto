@@ -17,6 +17,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 """added 22.1.2017 - for authentication"""
 AUTH_USER_MODEL = 'gameapp.User'
+SOCIAL_AUTH_USER_MODEL = 'gameapp.User'
+
+SOCIAL_AUTH_SLUGIFY_USERNAMES = False
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -100,7 +103,23 @@ SOCIAL_AUTH_TWITTER_KEY = '43kYp5l6SEAjemQcMzJGggpoD'
 SOCIAL_AUTH_TWITTER_SECRET = 'BMPvxkZEAj9OWcorPgpEu4sIAoy6XW5cXjL7kWizv1dypQBTX7'
 
 SOCIAL_AUTH_FACEBOOK_KEY = '1780843878880223'  # App ID
-SOCIAL_AUTH_FACEBOOK_SECRET = '192eb87fedfd2441a75a2dedc8de5a26' 
+SOCIAL_AUTH_FACEBOOK_SECRET = '192eb87fedfd2441a75a2dedc8de5a26'
+
+
+SOCIAL_AUTH_PIPELINE = (
+    'social.pipeline.social_auth.social_details',
+    'social.pipeline.social_auth.social_uid',
+    'social.pipeline.social_auth.auth_allowed',
+    'social.pipeline.social_auth.social_user',
+    'social.pipeline.user.get_username',
+    'social.pipeline.user.create_user',
+
+    'gameapp.pipelines.create_slug',
+
+    'social.pipeline.social_auth.associate_user',
+    'social.pipeline.social_auth.load_extra_data',
+    'social.pipeline.user.user_details',
+)
 
 
 # Database

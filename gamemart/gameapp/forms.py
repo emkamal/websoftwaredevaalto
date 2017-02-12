@@ -20,8 +20,8 @@ class UserForm(forms.ModelForm):
     def save(self):
         instance = super(UserForm, self).save(commit=False)
 
-        #instance.slug = orig = '-'.join((slugify(instance.first_name), slugify(instance.last_name)))
-        instance.slug = orig = slugify(instance.email)
+        instance.slug = orig = '-'.join((slugify(instance.first_name), slugify(instance.last_name)))
+        #instance.slug = orig = slugify(instance.username)
 
         for x in itertools.count(1):
             if not User.objects.filter(slug=instance.slug).exists():
