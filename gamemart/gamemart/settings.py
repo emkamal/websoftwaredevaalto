@@ -38,9 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.admin',
     'social.apps.django_app.default',
     'gameapp',
-    'django.contrib.admin',
 ]
 
 MIDDLEWARE = [
@@ -83,7 +83,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.twitter.TwitterOAuth',
     'social.backends.facebook.FacebookOAuth2',
 
-    #'django.contrib.auth.backends.ModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 #this maybe to separate configuration from settings
@@ -152,8 +152,12 @@ BASE_URL = 'http://192.168.5.5'
 PAYMENT_SECRET_KEY = '09f8b39217904623a8c303f11ac74b13';
 SELLER_ID = 'kamalopidayo'
 
-from django.core.urlresolvers import reverse_lazy
+#from django.core.urlresolvers import reverse_lazy
 
-LOGIN_REDIRECT_URL = reverse_lazy('dashboard')
-LOGIN_URL = reverse_lazy('login')
-LOGIN_URL = reverse_lazy('logout')
+#LOGIN_REDIRECT_URL = reverse_lazy('dashboard')
+#LOGIN_URL = reverse_lazy('login')
+#LOGIN_URL = reverse_lazy('logout')
+
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = 'home_page'
