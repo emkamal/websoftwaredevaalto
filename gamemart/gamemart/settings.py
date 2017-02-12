@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    'social.apps.django_app.default',
+    #'social.apps.django_app.default',
+    'social_django',
     'gameapp',
 ]
 
@@ -51,7 +52,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+    #'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'gamemart.urls'
@@ -67,8 +69,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'social.apps.django_app.context_processors.backends',
-                'social.apps.django_app.context_processors.login_redirect',
+                #'social.apps.django_app.context_processors.backends',
+                #'social.apps.django_app.context_processors.login_redirect',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -79,16 +83,24 @@ TEMPLATES[0]['OPTIONS']['context_processors'].append("gameapp.context_processors
 WSGI_APPLICATION = 'gamemart.wsgi.application'
 
 AUTHENTICATION_BACKENDS = (
-    'social.backends.github.GithubOAuth2',
-    'social.backends.twitter.TwitterOAuth',
-    'social.backends.facebook.FacebookOAuth2',
-
+    #'social.backends.github.GithubOAuth2',
+    #'social.backends.twitter.TwitterOAuth',
+    #'social.backends.facebook.FacebookOAuth2',
+    'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.facebook.FacebookOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
 #this maybe to separate configuration from settings
 SOCIAL_AUTH_GITHUB_KEY = 'a1e04b93197074ce03d5'
 SOCIAL_AUTH_GITHUB_SECRET = '0864e23c966bdb4f2900afb55973bb1cf5e5066a'
+
+SOCIAL_AUTH_TWITTER_KEY = '43kYp5l6SEAjemQcMzJGggpoD'
+SOCIAL_AUTH_TWITTER_SECRET = 'BMPvxkZEAj9OWcorPgpEu4sIAoy6XW5cXjL7kWizv1dypQBTX7'
+
+SOCIAL_AUTH_FACEBOOK_KEY = '1780843878880223'  # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = '192eb87fedfd2441a75a2dedc8de5a26' 
 
 
 # Database
