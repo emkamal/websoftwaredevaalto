@@ -204,6 +204,42 @@ def load_games(request, mode="all", tags="", num=3):
     except Game.DoesNotExist:
         raise Http404("Game does not exist")
 
+def build_games_view(request, querysets):
+
+    user_owner_games = [];
+
+    if(request.user.is_authenticated()):
+        user_purchases = Purchase.objects.filter(buyer_id=request.user.id)
+        if user_purchases.exists():
+            for user_purchase in user_purchases:
+                user_owner_games.append(user_purchase.game_id)
+
+    output = {}
+    for game in querysets:
+
+        game_banner_url = 'http://192.168.5.5/media/site/no-image-400x250.jpg';
+        for asset in game.asset_set.all():
+            if asset.asset_type == 'game-banner-400x250':
+                game_banner_url = asset.url
+                break
+
+        if game.id in user_owner_games:
+            game_bought = True
+        else:
+            game_bought = False
+
+        output[game.id] = {
+            'id': game.id,
+            'title': game.title,
+            'price': game.price,
+            'desc': game.desc,
+            'slug': game.slug,
+            'banner_url': game_banner_url,
+            'bought': game_bought,
+            'a': user_owner_games
+        }
+
+    return output
 
 def submit(request):
     form = SubmitForm(request.POST or None)
@@ -324,3 +360,20 @@ def api(request, target):
 
         else:
             return HttpResponse(target, content_type="application/json")
+
+def search(request):
+    keywords_string = request.GET.get("keywords")
+    keywords = keywords_string.split(' ')
+    objects_list = []
+    output = Game.objects.none()
+
+    for keyword in keywords:
+        objects_list.append(Game.objects.filter(title__icontains=keyword))
+        objects_list.append(Game.objects.filter(desc__icontains=keyword))
+
+    for obj in objects_list:
+        output = output | obj
+
+    games = build_games_view(request, output)
+
+    return render(request, 'search.html', {'games': games, 'page_title': keywords_string + " games"})
