@@ -250,7 +250,7 @@ def submit(request):
     if form.is_valid():
         form.save()
 
-    return render(request, 'submit.html')
+    return render(request, 'submit.html', {'page_title': 'Submit Games'})
 
 def game_by_id(request, id):
     game = get_object_or_404(Game, id=id)
