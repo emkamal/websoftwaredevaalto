@@ -1,9 +1,20 @@
-{% extends "base.html" %}
-{% block title %}Browse games{% endblock %}
+{% extends "base_without_jumbotron.html" %}
+{% block title %}Game purchase{% endblock %}
 {% block content %}
 {% load static %}
 <div class="container">
-  payment {{ status }}
+  {% if status == "success" %}
+    <h1 class="text-success">Thank You! :)</h1>
+    <p>Your game is ready to be played now</p>
+    <a href="{% url 'game' game.slug %}">Play {{ game.title }} now!</a>
+  {% elif status == "canceled" %}
+    <h1 class="text-success">Oh snap! :)</h1>
+    <p>Maybe you want to buy another game instead?</p>
+    <a href="{% url 'browse' %}">Browse games</a>
+  {% elif status == "error" %}
+    <h1 class="text-success">Ooops! :)</h1>
+    <p>Something is wrong, please try again</p>
+  {% endif %}
 </div>
 
 

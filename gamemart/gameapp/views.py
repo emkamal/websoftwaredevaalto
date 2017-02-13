@@ -279,11 +279,12 @@ def game_by_slug(request, slug):
 
     highscore = {}
     for gameplay in gameplays:
-        if gameplay.player_id in highscore:
-            if gameplay.score > highscore[gameplay.player_id]:
+        if gameplay.score is not None:
+            if gameplay.player_id in highscore:
+                if gameplay.score > highscore[gameplay.player_id]:
+                    highscore[gameplay.player_id] = gameplay.score
+            else:
                 highscore[gameplay.player_id] = gameplay.score
-        else:
-            highscore[gameplay.player_id] = gameplay.score
 
     for key, score in highscore.items():
         user = get_object_or_404(User, id=key)
@@ -309,7 +310,7 @@ def payment(request, status, slug):
     purchase = Purchase(amount=game.price, buyer_id=request.user.id, game_id=game.id, status=status)
     purchase.save()
 
-    return render(request, 'payment.html', {'status': status})
+    return render(request, 'payment.html', {'status': status, 'game': game })
 
 def api(request, target):
     output = {}

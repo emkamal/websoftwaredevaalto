@@ -37,11 +37,18 @@ $(document).ready(function(){
       });
     }
     else if( msg.messageType == 'SAVE' ){
-      console.log('submitting state');
+
+      var gameStateScore = 0;
+      if("score" in msg.gameState){
+        gameStateScore = msg.gameState.score;
+      }
+
+      console.log('submitting state, the score: '+msg.gameState.score);
       $.ajax({
         type: "POST",
         url: "/api/gameplay/",
         data: {
+          score: gameStateScore,
           state: JSON.stringify(msg.gameState),
           game_id: $("#gameframe").data("gameid"),
           csrfmiddlewaretoken: getCookie('csrftoken')
