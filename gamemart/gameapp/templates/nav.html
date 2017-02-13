@@ -8,28 +8,28 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="{{BASE_URL}}/">GameMart</a>
+      <a class="navbar-brand" href="{% url 'home' %}">GameMart</a>
     </div>
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
         <li class="dropdown mega-dropdown">
-          <a href="{{BASE_URL}}/games" class="dropdown-toggle" data-toggle="dropdown">Browse Games <span class="caret"></span></a>
+          <a href="{% url 'browse' %}" class="dropdown-toggle" data-toggle="dropdown">Browse Games <span class="caret"></span></a>
           <div class="row dropdown-menu mega-dropdown-menu">
             <div class="col-md-4 explore-column">
               <h5>Explore</h5>
               <ul>
-                <li><a href="{{BASE_URL}}/games/featured">Featured games</a></li>
-                <li><a href="{{BASE_URL}}/games/latest">Latest games</a></li>
-                <li><a href="{{BASE_URL}}/games/top-rated">Top rated games</a></li>
-                <li><a href="{{BASE_URL}}/games/top-grossing">Top grossing games</a></li>
-                <li><a href="{{BASE_URL}}/games/most-played">Most played games</a></li>
+                <li><a href="{% url 'explore' 'featured' %}">Featured games</a></li>
+                <li><a href="{% url 'explore' 'latest' %}">Latest games</a></li>
+                <li><a href="{% url 'explore' 'top-rated' %}">Top rated games</a></li>
+                <li><a href="{% url 'explore' 'top-grossing' %}">Top grossing games</a></li>
+                <li><a href="{% url 'explore' 'most-played' %}">Most played games</a></li>
               </ul>
             </div>
             <div class="col-md-4">
               <h5>Categories</h5>
               <ul>
                 {% for category in game_categories %}
-                  <li><a href="{{BASE_URL}}/games/category/{{ category.slug }}">{{ category.label }}</a></li>
+                  <li><a href="{% url 'browse_by_category' category.slug %}">{{ category.label }}</a></li>
                 {% endfor %}
               </ul>
             </div>
@@ -37,68 +37,38 @@
               <h5>Tags</h5>
               <ul>
                 {% for tag in game_tags %}
-                  <li><a href="{{BASE_URL}}/games/tag/{{ tag.slug }}">{{ tag.label }}</a></li>
+                  <li><a href="{% url 'browse_by_tag' tag.slug %}">{{ tag.label }}</a></li>
                 {% endfor %}
               </ul>
             </div>
           </div>
-          <!--
-          <ul class="dropdown-menu mega-dropdown-menu">
-            <li class="col-sm-3">
-              <ul>
-                <li><h3>Explore</h3></li>
-                <li><a href="{{BASE_URL}}/games/featured">Featured games</a></li>
-                <li><a href="{{BASE_URL}}/games/latest">Latest games</a></li>
-                <li><a href="{{BASE_URL}}/games/top-rated">Top rated games</a></li>
-                <li><a href="{{BASE_URL}}/games/top-grossing">Top grossing games</a></li>
-                <li><a href="{{BASE_URL}}/games/most-played">Most played games</a></li>
-              </ul>
-            </li>
-            <li class="col-sm-3">
-              <ul>
-                <li class="dropdown-header">categories</li>
-                {% for category in game_categories %}
-                  <li><a href="{{BASE_URL}}/games/category/{{ category.slug }}">{{ category.label }}</a></li>
-                {% endfor %}
-              </ul>
-            </li>
-            <li class="col-sm-3">
-              <ul>
-                <li class="dropdown-header">Explore by tags</li>
-                {% for tag in game_tags %}
-                  <li><a href="{{BASE_URL}}/games/tag/{{ tag.slug }}">{{ tag.label }}</a></li>
-                {% endfor %}
-              </ul>
-            </li>
-          </ul>
-        -->
         </li>
-        {% if request.user.is_authenticated %}
+        {% if userIsLoggedIn %}
           <li {% if section == 'submit' %} class='selected' {% endif %} >
-            <li><a href="{{BASE_URL}}/submit">Submit Games</a></li>
+            <li><a href="{% url 'submit' %}">Submit Games</a></li>
           </li>
         {% endif %}
       </ul>
-      <form action="{{BASE_URL}}/search" method="get" class="navbar-form navbar-left">
+      <form action="{% url 'search' %}" method="get" class="navbar-form navbar-left">
         <div class="form-group">
           <input type="text" name="keywords" class="form-control" placeholder="Search">
         </div>
       </form>
       <ul class="nav navbar-nav navbar-right">
-        {% if request.user.is_authenticated %}
-          <li><a href="{{BASE_URL}}/user/{{ user.slug }}">Welcome, {{user.first_name}}</a></li>
-          <li><a href="{{BASE_URL}}/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+        {% if userIsLoggedIn %}
+          <li><a href="{% url 'user_view' user.slug %}">Welcome, {{user.first_name}}</a></li>
+          <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
         {% else %}
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Register</b> <span class="caret"></span></a>
             <ul id="register-dp" class="dropdown-menu">
-              <li><a href="{{BASE_URL}}/registration"><i class="player"></i>As a player</a></li>
-              <li><a href="{{BASE_URL}}/registrationDeveloper"><i class="developer"></i>As a developer</a></li>
+              <li><a href="{% url 'registration' %}"><i class="player"></i>As a player</a></li>
+              <li><a href="{% url 'registration_developer' %}"><i class="developer"></i>As a developer</a></li>
             </ul>
           </li>
           <!-- <li><a href="{{BASE_URL}}/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li> -->
           <li class="dropdown">
-            <a href="{{BASE_URL}}/login" class="dropdown-toggle" data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
+            <a href="{% url 'login' %}" class="dropdown-toggle" data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
             <ul id="login-dp" class="dropdown-menu">
               <li>
                  <div class="row">
@@ -109,7 +79,7 @@
                         <a href="#" class="btn btn-tw"><i class="fa fa-twitter"></i> Twitter</a>
                       </div>
                         or
-                       <form class="form" role="form" method="post" action="/login/" accept-charset="UTF-8" id="login-nav">
+                       <form class="form" role="form" method="post" action="{% url 'login' %}" accept-charset="UTF-8" id="login-nav">
                           {% csrf_token %}
                           <div class="form-group">
                             <label class="sr-only" for="exampleInputEmail2">Email address</label>
@@ -131,7 +101,7 @@
                        </form>
                     </div>
                     <div class="bottom text-center">
-                      New here ? <a href="{{BASE_URL}}/registration"><b>Join Us</b></a>
+                      New here ? <a href="{% url 'registration' %}"><b>Join Us</b></a>
                     </div>
                  </div>
               </li>
