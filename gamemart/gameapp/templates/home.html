@@ -12,52 +12,35 @@
         <div class="controls pull-right"><a href='{% url "explore" "featured" %}'>view all</a></div>
       </div>
     </div>
-    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-      <div class="carousel-inner">
-        <div class="item active">
-          <div class="row">
-            {% for key, game in featured_games.items %}
-              <div class="col-sm-4">
-                <div class="col-item">
-                  <div class="photo">
-                    <a href="{% url 'game' game.slug %}">
-                      <img src="{{ game.banner_url }}" class="img-responsive" alt="a" />
-                    </a>
+    <div id="products" class="row list-group">
+      {% for key, game in featured_games.items %}
+        <div class="item col-xs-4 col-lg-4">
+          <div class="thumbnail">
+            <img class="group list-group-image" src="{{ game.banner_url }}" alt="no image" />
+            <div class="caption">
+              <h4 class="group inner list-group-item-heading"><a href="{{BASE_URL}}/game/{{ game.slug }}">{{ game.title }}</a></h4>
+              {# <p class="group inner list-group-item-text">{{game.desc|truncatechars:100}}</p>#}
+              {% if not game.bought %}
+                <div class="row">
+                  <div class="col-xs-12 col-md-6">
+                    <p class="lead">€ {{ game.price }}</p>
                   </div>
-                  <div class="info">
-                    <div class="row">
-                      <div class="price col-md-6">
-                        <h5>{{ game.title }}</h5>
-                        <h5 class="price-text-color">€ {{ game.price }}</h5>
-                      </div>
-                      <div class="rating hidden col-md-6">
-                        <i class="price-text-color fa fa-star"></i>
-                        <i class="price-text-color fa fa-star"></i>
-                        <i class="price-text-color fa fa-star"></i>
-                        <i class="price-text-color fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                      </div>
-                    </div>
-                    <div class="separator clear-left">
-                      <p class="btn-add">
-                        {% if not game.bought %}
-                          <i class="fa fa-shopping-cart"></i><a href="http://www.jquery2dotnet.com" class="hidden-sm">Buy</a>
-                        {% else %}
-                          <i class="fa fa-play"></i><a href="{% url 'game' game.slug %}" class="hidden-sm">Play</a>
-                        {% endif %}
-                      </p>
-                      <p class="btn-details">
-                        <i class="fa fa-list"></i><a href="{% url 'game' game.slug %}" class="hidden-sm">More details</a>
-                      </p>
-                    </div>
-                    <div class="clearfix"></div>
+                  <div class="col-xs-12 col-md-6 text-right">
+                    {% include "buy_form.html" with next_purchase_id=next_purchase_id checksum=game.checksum %}
                   </div>
                 </div>
-              </div>
-            {% endfor %}
+              {% else %}
+                <div class="row">
+                  <div class="col-xs-12 col-md-6"></div>
+                  <div class="col-xs-12 col-md-6 text-right">
+                    <a class="btn btn-success" href="{{BASE_URL}}/game/{{ game.slug }}">Play</a>
+                  </div>
+                </div>
+              {% endif %}
+            </div>
           </div>
         </div>
-      </div>
+      {% endfor %}
     </div>
   </div>
   <div class="row">
@@ -71,47 +54,37 @@
         </div>
       </div>
     </div>
-    <div class="item ">
-      <div class="row">
-        {% for key, game in latest_games.items %}
-          <div class="col-sm-3">
-            <div class="col-item">
-              <div class="photo">
-                <a href="{% url 'game' game.slug %}">
-                  <img src="{{ game.banner_url }}" class="img-responsive" alt="{{ game.title }}" />
-                </a>
-              </div>
-              <div class="info">
+    <div id="products" class="row list-group">
+      {% for key, game in latest_games.items %}
+        <div class="item col-xs-4 col-lg-4">
+          <div class="thumbnail">
+            <img class="group list-group-image" src="{{ game.banner_url }}" alt="no image" />
+            <div class="caption">
+              <h4 class="group inner list-group-item-heading"><a href="{{BASE_URL}}/game/{{ game.slug }}">{{ game.title }}</a></h4>
+              {# <p class="group inner list-group-item-text">{{game.desc|truncatechars:100}}</p>#}
+              {% if not game.bought %}
                 <div class="row">
-                  <div class="price col-md-6">
-                    <h5>{{ game.title }}</h5>
-                    <h5 class="price-text-color">€ {{ game.price }}</h5>
+                  <div class="col-xs-12 col-md-6">
+                    <p class="lead">€ {{ game.price }}</p>
                   </div>
-                  <div class="rating hidden col-md-6">
-                    <i class="price-text-color fa fa-star"></i><i class="price-text-color fa fa-star">
-                    </i><i class="price-text-color fa fa-star"></i><i class="price-text-color fa fa-star">
-                    </i><i class="fa fa-star"></i>
+                  <div class="col-xs-12 col-md-6 text-right">
+                    {% include "buy_form.html" with next_purchase_id=next_purchase_id checksum=game.checksum %}
                   </div>
                 </div>
-                <div class="separator clear-left">
-                  <p class="btn-add">
-                      {% if not game.bought %}
-                        <i class="fa fa-shopping-cart"></i><a href="http://www.jquery2dotnet.com" class="hidden-sm">Buy</a>
-                      {% else %}
-                        <i class="fa fa-play"></i><a href="{% url 'game' game.slug %}" class="hidden-sm">Play</a>
-                      {% endif %}
-                  </p>
-                  <p class="btn-details">
-                    <i class="fa fa-list"></i><a href="{% url 'game' game.slug %}" class="hidden-sm">More details</a>
-                  </p>
+              {% else %}
+                <div class="row">
+                  <div class="col-xs-12 col-md-6"></div>
+                  <div class="col-xs-12 col-md-6 text-right">
+                    <a class="btn btn-success" href="{{BASE_URL}}/game/{{ game.slug }}">Play</a>
+                  </div>
                 </div>
-                <div class="clearfix"></div>
-              </div>
+              {% endif %}
             </div>
           </div>
-        {% endfor %}
-      </div>
+        </div>
+      {% endfor %}
     </div>
+    
   </div>
 </div>
 

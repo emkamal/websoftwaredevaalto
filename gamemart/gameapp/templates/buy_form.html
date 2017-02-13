@@ -1,0 +1,10 @@
+<form action="http://payments.webcourse.niksula.hut.fi/pay/" method="POST">
+  <input type="hidden" name="pid" value="{{next_purchase_id}}" />
+  <input type="hidden" name="sid" value="GameMartInc" />
+  <input type="hidden" name="success_url" value="{{BASE_URL}}{% url 'pay' 'success' game.slug %}" />
+  <input type="hidden" name="cancel_url" value="{{BASE_URL}}{% url 'pay' 'canceled' game.slug %}" />
+  <input type="hidden" name="error_url" value="{{BASE_URL}}{% url 'pay' 'error' game.slug %}" />
+  <input type="hidden" name="checksum" value="{{ checksum }}" />
+  <input type="hidden" id="id_amount" name="amount" value="{{ game.price }}" />
+  <input class="btn btn-primary" type="submit" value="Buy">
+</form>

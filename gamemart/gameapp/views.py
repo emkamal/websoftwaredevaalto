@@ -13,7 +13,7 @@ import json
 
 def home(request):
     featured_games = load_games(request, 'featured', '', 3)
-    latest_games = load_games(request, 'latest', '', 4)
+    latest_games = load_games(request, 'latest', '', 6)
     r = render (
         request,
         'home.html',
@@ -21,13 +21,13 @@ def home(request):
             'page_title': 'Javascript Game Marketplace',
             'page_subtitle': 'Sell your games here and let others play',
             'featured_games': featured_games,
-            'latest_games': latest_games
+            'latest_games': latest_games,
+            'next_purchase_id': next_purchase_id(),
         },
         content_type='application/xhtml+xml'
     )
 
     return HttpResponse(r)
-    # return HttpResponse('home_page')
 
 #def user_login(request):
 #    if request.method == 'POST':
@@ -92,7 +92,8 @@ def browse(request):
         {
             'page_title': 'Games collection',
             'page_subtitle': 'Explore our game collection',
-            'games': games
+            'games': games,
+            'next_purchase_id': next_purchase_id()
         },
         content_type='application/xhtml+xml'
     )
@@ -124,7 +125,8 @@ def explore(request, type):
         {
             'page_title': page_title + " Games",
             'page_subtitle': '',
-            'games': games
+            'games': games,
+            'next_purchase_id': next_purchase_id()
         },
         content_type='application/xhtml+xml'
     )
@@ -188,6 +190,8 @@ def load_games(request, mode="all", tags="", num=3):
             else:
                 game_bought = False
 
+            checksum = get_checksum(next_purchase_id(), game.price)
+
             games[game.id] = {
                 'id': game.id,
                 'title': game.title,
@@ -196,7 +200,7 @@ def load_games(request, mode="all", tags="", num=3):
                 'slug': game.slug,
                 'banner_url': game_banner_url,
                 'bought': game_bought,
-                'a': user_owner_games
+                'checksum': checksum
             }
 
         return games
@@ -251,13 +255,19 @@ def submit(request):
 def game_by_id(request, id):
     game = get_object_or_404(Game, id=id)
 
-    purchase = Purchase.objects.latest('id')
-    next_purchase_id = purchase.id+1;
-
-    checksumstr = "pid={}&sid={}&amount={}&token={}".format(next_purchase_id, SELLER_ID, game.price, PAYMENT_SECRET_KEY)
-    checksum = md5(checksumstr.encode("ascii")).hexdigest()
+    checksum = get_checksum(next_purchase_id(), game.price)
 
     return render(request, 'gameview.html', {'game': game, 'next_purchase_id': next_purchase_id, 'page_title': game.title, 'checksum': checksum})
+
+def next_purchase_id():
+    purchase = Purchase.objects.latest('id')
+    next_purchase_id = int(purchase.id)+1;
+    return next_purchase_id
+
+def get_checksum(purchase_id, amount):
+    checksumstr = "pid={}&sid={}&amount={}&token={}".format(purchase_id, settings.SELLER_ID, amount, settings.PAYMENT_SECRET_KEY)
+    checksum = md5(checksumstr.encode("ascii")).hexdigest()
+    return checksum
 
 def game_by_slug(request, slug):
     game = get_object_or_404(Game, slug=slug)
