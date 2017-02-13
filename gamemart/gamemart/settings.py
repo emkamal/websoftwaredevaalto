@@ -83,6 +83,7 @@ TEMPLATES = [
 ]
 TEMPLATES[0]['OPTIONS']['context_processors'].append("gameapp.context_processors.load_taxonomies")
 TEMPLATES[0]['OPTIONS']['context_processors'].append("gameapp.context_processors.load_config")
+TEMPLATES[0]['OPTIONS']['context_processors'].append("gameapp.context_processors.load_state")
 
 WSGI_APPLICATION = 'gamemart.wsgi.application'
 

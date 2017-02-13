@@ -6,6 +6,15 @@ def load_taxonomies(request):
     game_tags = Taxonomy.objects.filter(taxonomy_type='game_tag')
     return {'game_categories': game_categories, 'game_tags': game_tags}
 
+def load_state(request):
+    userIsLoggedIn = False
+    if request.user.is_authenticated():
+        userIsLoggedIn = True
+
+    return {
+        'userIsLoggedIn': userIsLoggedIn
+    }
+
 def load_config(request):
     return {'BASE_URL': settings.BASE_URL}
 

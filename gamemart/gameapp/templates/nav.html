@@ -14,69 +14,49 @@
       <ul class="nav navbar-nav">
         <li class="dropdown mega-dropdown">
           <a href="{{BASE_URL}}/games" class="dropdown-toggle" data-toggle="dropdown">Browse Games <span class="caret"></span></a>
-          <ul class="dropdown-menu mega-dropdown-menu">
-            <li class="col-sm-3 hide">
+          <div class="row dropdown-menu mega-dropdown-menu">
+            <div class="col-md-4 explore-column">
+              <h5>Explore</h5>
               <ul>
-                <li class="dropdown-header">Men Collection</li>
-                              <div id="menCollection" class="carousel slide" data-ride="carousel">
-                                <div class="carousel-inner">
-                                  <div class="item active">
-                                      <a href="#"><img src="http://placehold.it/254x150/ff3546/f5f5f5/&text=New+Collection" class="img-responsive" alt="product 1"></a>
-                                      <h4><small>Summer dress floral prints</small></h4>
-                                      <button class="btn btn-primary" type="button">49,99 €</button> <button href="#" class="btn btn-default" type="button"><span class="glyphicon glyphicon-heart"></span> Add to Wishlist</button>
-                                  </div><!-- End Item -->
-                                  <div class="item">
-                                      <a href="#"><img src="http://placehold.it/254x150/3498db/f5f5f5/&text=New+Collection" class="img-responsive" alt="product 2"></a>
-                                      <h4><small>Gold sandals with shiny touch</small></h4>
-                                      <button class="btn btn-primary" type="button">9,99 €</button> <button href="#" class="btn btn-default" type="button"><span class="glyphicon glyphicon-heart"></span> Add to Wishlist</button>
-                                  </div><!-- End Item -->
-                                  <div class="item">
-                                      <a href="#"><img src="http://placehold.it/254x150/2ecc71/f5f5f5/&text=New+Collection" class="img-responsive" alt="product 3"></a>
-                                      <h4><small>Denin jacket stamped</small></h4>
-                                      <button class="btn btn-primary" type="button">49,99 €</button> <button href="#" class="btn btn-default" type="button"><span class="glyphicon glyphicon-heart"></span> Add to Wishlist</button>
-                                  </div><!-- End Item -->
-                                </div><!-- End Carousel Inner -->
-                                <!-- Controls -->
-                                <a class="left carousel-control" href="#menCollection" role="button" data-slide="prev">
-                                  <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                  <span class="sr-only">Previous</span>
-                                </a>
-                                <a class="right carousel-control" href="#menCollection" role="button" data-slide="next">
-                                  <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                  <span class="sr-only">Next</span>
-                                </a>
-                              </div><!-- /.carousel --
-                              <li class="divider"></li>
-                              <li><a href="#">View all Collection <span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
-              </ul>
-            </li>
-            <li class="col-sm-3">
-              <ul>
-                <li class="dropdown-header">Features</li>
-                <li><a href="#">Featured games</a></li>
-                <li><a href="#">Top rated games</a></li>
-                <li><a href="#">Most played games</a></li>
-                <li><a href="#">Latest games</a></li>
-                <!-- <li class="divider"></li>
-                <li class="dropdown-header">Fonts</li>
-                <li><a href="#">Glyphicon</a></li>
-                <li><a href="#">Google Fonts</a></li> -->
-              </ul>
-            </li>
-            <li class="col-sm-3">
-              <ul>
-                <li class="dropdown-header">Explore</li>
                 <li><a href="{{BASE_URL}}/games/featured">Featured games</a></li>
                 <li><a href="{{BASE_URL}}/games/latest">Latest games</a></li>
                 <li><a href="{{BASE_URL}}/games/top-rated">Top rated games</a></li>
                 <li><a href="{{BASE_URL}}/games/top-grossing">Top grossing games</a></li>
                 <li><a href="{{BASE_URL}}/games/most-played">Most played games</a></li>
-
+              </ul>
+            </div>
+            <div class="col-md-4">
+              <h5>Categories</h5>
+              <ul>
+                {% for category in game_categories %}
+                  <li><a href="{{BASE_URL}}/games/category/{{ category.slug }}">{{ category.label }}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
+            <div class="col-md-4">
+              <h5>Tags</h5>
+              <ul>
+                {% for tag in game_tags %}
+                  <li><a href="{{BASE_URL}}/games/tag/{{ tag.slug }}">{{ tag.label }}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+          <!--
+          <ul class="dropdown-menu mega-dropdown-menu">
+            <li class="col-sm-3">
+              <ul>
+                <li><h3>Explore</h3></li>
+                <li><a href="{{BASE_URL}}/games/featured">Featured games</a></li>
+                <li><a href="{{BASE_URL}}/games/latest">Latest games</a></li>
+                <li><a href="{{BASE_URL}}/games/top-rated">Top rated games</a></li>
+                <li><a href="{{BASE_URL}}/games/top-grossing">Top grossing games</a></li>
+                <li><a href="{{BASE_URL}}/games/most-played">Most played games</a></li>
               </ul>
             </li>
             <li class="col-sm-3">
               <ul>
-                <li class="dropdown-header">Explore by categories</li>
+                <li class="dropdown-header">categories</li>
                 {% for category in game_categories %}
                   <li><a href="{{BASE_URL}}/games/category/{{ category.slug }}">{{ category.label }}</a></li>
                 {% endfor %}
@@ -91,101 +71,73 @@
               </ul>
             </li>
           </ul>
+        -->
         </li>
-
         {% if request.user.is_authenticated %}
-
-             <li {% if section == 'submit' %} class='selected' {% endif %} >
-                <li><a href="{{BASE_URL}}/submit">Submit Games</a></li>
-             </li>
-         {% endif %}
-
-
-
+          <li {% if section == 'submit' %} class='selected' {% endif %} >
+            <li><a href="{{BASE_URL}}/submit">Submit Games</a></li>
+          </li>
+        {% endif %}
       </ul>
       <form action="{{BASE_URL}}/search" method="get" class="navbar-form navbar-left">
         <div class="form-group">
           <input type="text" name="keywords" class="form-control" placeholder="Search">
         </div>
-        <button type="submit" class="btn btn-default">search</button>
       </form>
       <ul class="nav navbar-nav navbar-right">
-        <!--
-        <li><a href="{{BASE_URL}}/registration"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-      -->
-
+        {% if request.user.is_authenticated %}
+          <li><a href="{{BASE_URL}}/user/{{ user.slug }}">Welcome, {{user.first_name}}</a></li>
+          <li><a href="{{BASE_URL}}/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+        {% else %}
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Register</b> <span class="caret"></span></a>
             <ul id="register-dp" class="dropdown-menu">
+              <li><a href="{{BASE_URL}}/registration"><i class="player"></i>As a player</a></li>
+              <li><a href="{{BASE_URL}}/registrationDeveloper"><i class="developer"></i>As a developer</a></li>
+            </ul>
+          </li>
+          <!-- <li><a href="{{BASE_URL}}/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li> -->
+          <li class="dropdown">
+            <a href="{{BASE_URL}}/login" class="dropdown-toggle" data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
+            <ul id="login-dp" class="dropdown-menu">
               <li>
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="register-alternatives">
-                      <a href="{{BASE_URL}}/registration" class="btn btn-fb"><i class="player"></i>As a player</a>
-                      <a href="{{BASE_URL}}/registrationDeveloper" class="btn btn-t"><i class="developer"></i>As a developer</a>
-                      <a href="{{BASE_URL}}/registrationAdmin" class="btn btn-tw"><i class="admin"></i>As an admin</a>
+                 <div class="row">
+                    <div class="col-md-12">
+                      Login via
+                      <div class="social-buttons">
+                        <a href="#" class="btn btn-fb"><i class="fa fa-facebook"></i> Facebook</a>
+                        <a href="#" class="btn btn-tw"><i class="fa fa-twitter"></i> Twitter</a>
+                      </div>
+                        or
+                       <form class="form" role="form" method="post" action="/login/" accept-charset="UTF-8" id="login-nav">
+                          {% csrf_token %}
+                          <div class="form-group">
+                            <label class="sr-only" for="exampleInputEmail2">Email address</label>
+                            <input type="text" class="form-control" id="id_username" placeholder="your username" name="username" required>
+                          </div>
+                          <div class="form-group">
+                            <label class="sr-only" for="exampleInputPassword2">Password</label>
+                            <input type="password" class="form-control" id="id_password" placeholder="Password" name="password" required>
+                            <div class="help-block text-right hide"><a href="">Forget the password ?</a></div>
+                          </div>
+                          <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+                          </div>
+                          <div class="checkbox hide">
+                            <label>
+                              <input type="checkbox"> keep me logged-in
+                            </label>
+                          </div>
+                       </form>
                     </div>
-                  </div>
-                </div>
+                    <div class="bottom text-center">
+                      New here ? <a href="{{BASE_URL}}/registration"><b>Join Us</b></a>
+                    </div>
+                 </div>
               </li>
             </ul>
           </li>
-
-
-            {% if request.user.is_authenticated %}
-
-                <li><a href="{{BASE_URL}}/user/{{ user.slug }}">Welcome, {{user.first_name}}</a></li>
-
-                  <li><a href="{{BASE_URL}}/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
-            {% else %}
-
-              <li><a href="{{BASE_URL}}/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-            {% endif %}
-
-
-
-        <!--
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
-          <ul id="login-dp" class="dropdown-menu">
-            <li>
-               <div class="row">
-                  <div class="col-md-12">
-                    Login via
-                    <div class="social-buttons">
-                      <a href="#" class="btn btn-fb"><i class="fa fa-facebook"></i> Facebook</a>
-                      <a href="#" class="btn btn-tw"><i class="fa fa-twitter"></i> Twitter</a>
-                    </div>
-                                    or
-                     <form class="form" role="form" method="post" action="login/" accept-charset="UTF-8" id="login-nav">
-                        {% csrf_token %}
-                        <div class="form-group">
-                           <label class="sr-only" for="exampleInputEmail2">Email address</label>
-                           <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Email address" required>
-                        </div>
-                        <div class="form-group">
-                           <label class="sr-only" for="exampleInputPassword2">Password</label>
-                           <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password" required>
-                                                 <div class="help-block text-right"><a href="">Forget the password ?</a></div>
-                        </div>
-                        <div class="form-group">
-                           <button type="submit" class="btn btn-primary btn-block">Sign in</button>
-                        </div>
-                        <div class="checkbox">
-                           <label>
-                           <input type="checkbox"> keep me logged-in
-                           </label>
-                        </div>
-                     </form>
-                  </div>
-                  <div class="bottom text-center">
-                    New here ? <a href="{{BASE_URL}}/register"><b>Join Us</b></a>
-                  </div>
-               </div>
-            </li>
-          </ul>
-        </li>
-      -->
+        {% endif %}
       </ul>
     </div><!--/.nav-collapse -->
   </div>
