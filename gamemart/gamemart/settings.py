@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     #'social.apps.django_app.default',
     'social_django',
     'gameapp',
-    'social.apps.django_app.default',
+    #'social.apps.django_app.default',
 ]
 
 MIDDLEWARE = [

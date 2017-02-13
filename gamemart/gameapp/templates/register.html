@@ -3,10 +3,9 @@
 {% block content %}
 
 <div class="container">
-
   <div class="row">
     <div class="col-md-6 col-sm-6 col-xs-12">
-     <form action="/register/" method="post">
+    <form action="/register/" method="post">
      {% csrf_token %}
      <p class="form-group">
        <label for="id_first_name">First name:</label>
@@ -22,11 +21,11 @@
      </p>
      <p class="form-group">
        <label for="id_password">Password:</label>
-       <input class="form-control" id="id_password" type="password" name="password"/>
+       <input class="form-control" id="id_password" type="password" name="password" required=""/>
      </p>
      <p class="form-group">
        <label for="id_email">Email:</label>
-       <input class="form-control" id="id_email" type="email" name="email"/>
+       <input class="form-control" id="id_email" type="email" name="email" required=""/>
      </p>
      <p class="form-group">
        <label for="id_user_type">Type:</label>
@@ -39,7 +38,7 @@
 
      <input class="form-control btn btn-primary" type="submit" value="Register" />
     </form>
+    </div>
   </div>
-</div>
 </div>
 {% endblock %}
