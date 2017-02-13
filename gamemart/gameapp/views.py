@@ -61,10 +61,10 @@ def dashboard(request):
     #return HttpResponse('home_page')
 
 def registration(request):
-    return render(request, 'register.html', {})
+    return render(request, 'register.html', {'page_title': 'Registration'})
 
 def registrationDeveloper(request):
-    return render(request, 'registerDeveloper.html', {})
+    return render(request, 'registerDeveloper.html', {'page_title': 'Developer Registration'})
 
 def registrationAdmin(request):
     return render(request, 'registerAdmin.html', {})
@@ -81,7 +81,7 @@ def register(request):
             return redirect('login')
     else:
         user_form = UserForm()
-    return render(request, 'register.html', {'form': user_form })
+    return render(request, 'register.html', {'form': user_form, 'page_title': 'Registration' })
 
 def browse(request):
     games = load_games(request, 'featured')

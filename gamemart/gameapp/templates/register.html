@@ -3,40 +3,43 @@
 {% block content %}
 
 <div class="container">
-   <h2>Player Registration</h2>
 
+  <div class="row">
+    <div class="col-md-6 col-sm-6 col-xs-12">
      <form action="/register/" method="post">
      {% csrf_token %}
-     <p>
+     <p class="form-group">
        <label for="id_first_name">First name:</label>
-       <input id="id_first_name" type="text" name="first_name"/>
+       <input class="form-control" id="id_first_name" type="text" name="first_name"/>
      </p>
-     <p>
+     <p class="form-group">
        <label for="id_last_name">Last name:</label>
-       <input id="id_last_name" type="text" name="last_name"/>
+       <input class="form-control" id="id_last_name" type="text" name="last_name"/>
      </p>
-     <p>
+     <p class="form-group">
        <label for="id_username">Username:</label>
-       <input id="id_username" type="text" name="username"/>
+       <input class="form-control" id="id_username" type="text" name="username"/>
      </p>
-     <p>
+     <p class="form-group">
        <label for="id_password">Password:</label>
-       <input id="id_password" type="password" name="password"/>
+       <input class="form-control" id="id_password" type="password" name="password"/>
      </p>
-     <p>
+     <p class="form-group">
        <label for="id_email">Email:</label>
-       <input id="id_email" type="email" name="email"/>
+       <input class="form-control" id="id_email" type="email" name="email"/>
      </p>
-     <p>
+     <p class="form-group">
        <label for="id_user_type">Type:</label>
-       <input id="id_user_type" type="text" name="user_type" value="player"/>
+       <input class="form-control" id="id_user_type" type="text" name="user_type" value="player"/>
      </p>
 
      <!--
-     <input id="id_slug" type="hidden" name="slug" value="keijo"/>
+     <input class="form-control" id="id_slug" type="hidden" name="slug" value="keijo"/>
    -->
 
-     <input type="submit" value="Register" />
-
+     <input class="form-control btn btn-primary" type="submit" value="Register" />
+    </form>
+  </div>
+</div>
 </div>
 {% endblock %}

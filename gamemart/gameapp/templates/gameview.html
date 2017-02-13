@@ -67,17 +67,10 @@
         <p>{{ game.instruction }}</p>
       {% endif %}
     </div>
-    {% if not userIsLoggedIn %}
     <div class="col-md-4 text-right">
       <h3>€ {{ game.price }}</h3>
-      <a href="{% url 'login' %}" class="btn btn-default">Login to Buy</a>
-    </div>
-    {% elif not game_bought  %}
-      <div class="col-md-4 text-right">
-        <h3>€ {{ game.price }}</h3>
         {% include "buy_form.html" %}
       </div>
-    {% endif %}
   </div>
 </div>
 
