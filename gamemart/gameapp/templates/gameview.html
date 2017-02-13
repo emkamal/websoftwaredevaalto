@@ -67,10 +67,24 @@
         <p>{{ game.instruction }}</p>
       {% endif %}
     </div>
-    <div class="col-md-4 text-right">
-      <h3>€ {{ game.price }}</h3>
-        {% include "buy_form.html" %}
-      </div>
+    <div class="col-md-4 ">
+      <h3 class="text-right">€ {{ game.price }}</h3>
+      {% include "buy_form.html" %}
+      <hr />
+      <h4>Highscore</h4>
+      <table class="table">
+        <tr>
+          <th>Username</th>
+          <th>Score</th>
+        </tr>
+        {% for key, score in highscore.items %}
+          <tr>
+            <td>{{key}}</td>
+            <td>{{score}}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
   </div>
 </div>
 

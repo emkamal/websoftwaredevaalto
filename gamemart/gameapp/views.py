@@ -190,7 +190,7 @@ def load_games(request, mode="all", tags="", num=3):
             else:
                 game_bought = False
 
-            checksum = get_checksum(next_purchase_id(), game.price)
+            checksum = get_checksum(game.price)
 
             games[game.id] = {
                 'id': game.id,
@@ -252,20 +252,13 @@ def submit(request):
 
     return render(request, 'submit.html', {'page_title': 'Submit Games'})
 
-def game_by_id(request, id):
-    game = get_object_or_404(Game, id=id)
-
-    checksum = get_checksum(next_purchase_id(), game.price)
-
-    return render(request, 'gameview.html', {'game': game, 'next_purchase_id': next_purchase_id, 'page_title': game.title, 'checksum': checksum})
-
 def next_purchase_id():
     purchase = Purchase.objects.latest('id')
     next_purchase_id = int(purchase.id)+1;
     return next_purchase_id
 
-def get_checksum(purchase_id, amount):
-    checksumstr = "pid={}&sid={}&amount={}&token={}".format(purchase_id, settings.SELLER_ID, amount, settings.PAYMENT_SECRET_KEY)
+def get_checksum(amount):
+    checksumstr = "pid={}&sid={}&amount={}&token={}".format(next_purchase_id(), settings.SELLER_ID, amount, settings.PAYMENT_SECRET_KEY)
     checksum = md5(checksumstr.encode("ascii")).hexdigest()
     return checksum
 
@@ -281,13 +274,35 @@ def game_by_slug(request, slug):
                 if user_purchase.game_id == game.id and user_purchase.status == 'success' :
                     game_bought = True
 
-    purchase = Purchase.objects.latest('id')
-    next_purchase_id = purchase.id+1;
 
-    checksumstr = "pid={}&sid={}&amount={}&token={}".format(next_purchase_id, settings.SELLER_ID, game.price, settings.PAYMENT_SECRET_KEY)
-    checksum = md5(checksumstr.encode("ascii")).hexdigest()
+    gameplays = Gameplay.objects.filter(game_id=game.id).order_by('score')
 
-    return render(request, 'gameview.html', {'game': game, 'next_purchase_id': next_purchase_id, 'page_title': game.title, 'checksum': checksum, 'game_bought': game_bought})
+    highscore = {}
+    for gameplay in gameplays:
+        if gameplay.player_id in highscore:
+            if gameplay.score > highscore[gameplay.player_id]:
+                highscore[gameplay.player_id] = gameplay.score
+        else:
+            highscore[gameplay.player_id] = gameplay.score
+
+    for key, score in highscore.items():
+        user = get_object_or_404(User, id=key)
+        highscore[user.username] = highscore.pop(key)
+
+    checksum = get_checksum(game.price)
+
+    return render(
+        request,
+        'gameview.html',
+        {
+            'game': game,
+            'next_purchase_id': next_purchase_id(),
+            'page_title': game.title,
+            'checksum': checksum,
+            'game_bought': game_bought,
+            'highscore': highscore
+        }
+    )
 
 def payment(request, status, slug):
     game = get_object_or_404(Game, slug=slug)
