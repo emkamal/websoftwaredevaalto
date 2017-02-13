@@ -7,14 +7,6 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <script type="text/javascript">
-            if (frameElement == null) {
-                //change location or close
-                window.location = "http://192.168.5.5/game/tetris";
-                // or window.close();
-            }
-        </script>
-
         <!-- Place favicon.ico in the root directory -->
 
         <link rel="stylesheet" href="blockrain.css">
@@ -31,16 +23,22 @@
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.1.1.min.js"><\/script>')</script>
         <script src="blockrain.jquery.min.js"></script>
         <script>
-            // $('.game').blockrain();
-            $('.game').blockrain({
-              // autoplay: true,
-              // autoplayRestart: true
-              theme: 'candy',
-              onGameOver: function(score){
-                parent.postMessage({'state': 'gameOver', 'score': score}, '*');
-              }
-            });
-
+        if(frameElement==null){
+          window.location="http://192.168.5.5/game/tetris"
+        }
+        else{
+          $('.game').blockrain({
+            theme:'candy',
+            onGameOver:function(score){
+              var msg = {
+                'messageType': 'SCORE',
+                'state':'gameOver',
+                'score':score
+              };
+              parent.postMessage(msg,'*');
+            }
+          })
+        }
         </script>
     </body>
 </html>

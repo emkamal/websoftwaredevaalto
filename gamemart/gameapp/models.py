@@ -1,11 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.postgres.fields import JSONField
 
 class Taxonomy(models.Model):
     taxonomy_type = models.CharField(max_length=20)
     label = models.CharField(max_length=50)
     slug = models.SlugField(max_length=50)
     parent = models.ForeignKey('self',null=True,blank=True)
+    games = models.ManyToManyField('Game')
 
     def __str__(self):
         return u'%s' % (self.label)
@@ -61,7 +63,7 @@ class Gameplay(models.Model):
     player = models.ForeignKey('User', on_delete=models.CASCADE)
     game = models.ForeignKey('Game', on_delete=models.CASCADE)
     score = models.FloatField(default=0, null=True, blank=True)
-    state = models.CharField(max_length=10, null=True, blank=True)
+    state = models.TextField(null=True, blank=True)
     timestamp = models.DateTimeField(auto_now=True)
 
 class Purchase(models.Model):

@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     #'social.apps.django_app.default',
     'social_django',
     'gameapp',
+    'social.apps.django_app.default',
 ]
 
 MIDDLEWARE = [
@@ -180,14 +181,9 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 BASE_URL = 'http://192.168.5.5'
-PAYMENT_SECRET_KEY = '09f8b39217904623a8c303f11ac74b13';
-SELLER_ID = 'kamalopidayo'
+PAYMENT_SECRET_KEY = '3195b7c7a372b31e6b1eaa8242f8dcfb';
+SELLER_ID = 'GameMartInc'
 
-#from django.core.urlresolvers import reverse_lazy
-
-#LOGIN_REDIRECT_URL = reverse_lazy('dashboard')
-#LOGIN_URL = reverse_lazy('login')
-#LOGIN_URL = reverse_lazy('logout')
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'

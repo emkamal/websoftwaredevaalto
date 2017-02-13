@@ -6,10 +6,10 @@ class TaxonomyAdmin(admin.ModelAdmin):
     list_display = ('label','taxonomy_type')
 admin.site.register(Taxonomy,TaxonomyAdmin)
 
-class Game_TaxonomyAdmin(admin.ModelAdmin):
-    list_display = ('game','taxonomy')
-    pass
-admin.site.register(Game_Taxonomy,Game_TaxonomyAdmin)
+# class Game_TaxonomyAdmin(admin.ModelAdmin):
+#     list_display = ('game','taxonomy')
+#     pass
+# admin.site.register(Game_Taxonomy,Game_TaxonomyAdmin)
 
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ('person','game','rating')

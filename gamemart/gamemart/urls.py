@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'^game/(?P<slug>[-\w]+)/$', views.game_by_slug, name='game_view'),
     url(r'^payment/(?P<status>[-\w]+)/on/(?P<slug>[-\w]+)/$', views.payment),
     url(r'^api/(?P<target>[-\w]+)/$', views.api),
+    url(r'^search/$', views.search),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
