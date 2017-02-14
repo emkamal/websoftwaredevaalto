@@ -22,7 +22,45 @@ body{
 .lead{
   margin-bottom: 0;
 }
+.pricetag h3 {
+    margin: 0;
+    background: #ccc;
+    width: auto;
+    display: inline-block;
+    padding: 6px 20px;
+    position: relative;
+    border-radius: 0 5px 5px 0;
+}
+.pricetag h3:before {
+    content: "";
+    display: block;
+    width: 0;
+    height: 0;
+    position: absolute;
+    background: transparent;
+    border-right: 20px solid #ccc;
+    border-top: 20px solid transparent;
+    border-bottom: 19px solid transparent;
+    left: -20px;
+    top: 0px;
+}
+.pricetag h3:after {
+    content: "";
+    display: block;
+    background: #fff;
+    width: 5px;
+    height: 5px;
+    position: absolute;
+    top: 50%;
+    border-radius: 10px;
+    left: -10px;
+    margin-top: -1.5px;
+}
 
+.game-banner{
+  max-width: 100%;
+  margin: 0 0 10px;
+}
 
 @import url(http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css);
 .col-item
