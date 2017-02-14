@@ -11,6 +11,7 @@ from .forms import SubmitForm
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 import json
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def home(request):
     featured_games = load_games(request, 'featured', '', 3)
@@ -120,13 +121,27 @@ def explore(request, type):
     else:
         raise Http404
 
+    # games_tuple = tuple(games)
+    paginator = Paginator(games, 9)
+
+    page = request.GET.get('page')
+
+    try:
+        games_output = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        games_output = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        games_output = paginator.page(paginator.num_pages)
+
     r = render (
         request,
         'browse.html',
         {
             'page_title': page_title + " Games",
             'page_subtitle': '',
-            'games': games,
+            'games': games_output,
             'next_purchase_id': next_purchase_id()
         },
         content_type='application/xhtml+xml'
@@ -168,7 +183,7 @@ def load_games(request, mode="all", tags="", num=3):
                 user_owner_games.append(user_purchase.game_id)
 
     try:
-        games = {}
+        games = []
         if mode == "all":
             games_querysets = Game.objects.all()
         elif mode == "featured":
@@ -193,7 +208,7 @@ def load_games(request, mode="all", tags="", num=3):
 
             checksum = get_checksum(game.price)
 
-            games[game.id] = {
+            games.append({
                 'id': game.id,
                 'title': game.title,
                 'price': game.price,
@@ -202,7 +217,7 @@ def load_games(request, mode="all", tags="", num=3):
                 'banner_url': game_banner_url,
                 'bought': game_bought,
                 'checksum': checksum
-            }
+            })
 
         return games
 
