@@ -274,7 +274,7 @@ def build_games_view(request, querysets):
 
 #############################################
 def submit(request):
-<<<<<<< HEAD
+
    if not request.user.is_authenticated:
         return redirect((settings.LOGIN_URL))
    if request.method == "POST":
