@@ -65,10 +65,18 @@ class UserForm(forms.ModelForm):
 class SubmitForm(forms.ModelForm):
     class Meta:
         model = Game # referencing the Game model and its fields
-        fields = [
-            "title",
-            "desc",
-            "instruction",
-            "url",
-            "price"
-        ]
+        fields = ('title', 'desc', 'instruction', 'url', 'price')
+
+    def save(self):
+        instance = super(SubmitForm, self).save(commit=False)
+
+        instance.slug = orig = slugify(instance.title)
+
+        for x in itertools.count(1):
+            if not Game.objects.filter(slug=instance.slug).exists():
+                break
+            instance.slug = '%s-%d' % (orig, x)
+
+        instance.save()
+
+        return instance

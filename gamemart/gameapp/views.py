@@ -272,18 +272,18 @@ def build_games_view(request, querysets):
 
 #############################################
 def submit(request):
-   if request.method == "POST":
-       form = SubmitForm(data=request.POST)
-       if form.is_valid():
-           game = form.save(commit=False)
-           game.owner_id = request.user.id
-           game.added_date = timezone.now()
-           game.save()
-           #return redirect('game_detail', pk=game.pk)
-           return redirect('home_page')
-   else:
-       form = SubmitForm()
-   return render(request, 'submit.html', {'form': form})
+    if request.method == "POST":
+        form = SubmitForm(data=request.POST)
+        if form.is_valid():
+            game = form.save(commit=False)
+            game.owner_id = request.user.id
+            game.added_date = timezone.now()
+            game.save()
+            #return redirect('game_detail', pk=game.pk)
+            return redirect('home_page')
+    else:
+        form = SubmitForm()
+    return render(request, 'submit.html', {'form': form})
 
 ################################################
 
