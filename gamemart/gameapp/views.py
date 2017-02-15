@@ -259,7 +259,7 @@ def submit(request):
    if request.method == "POST":
        form = SubmitForm(data=request.POST)
        if form.is_valid():
-           game = form.save()
+           game = form.save(request)
            game.save()
            return redirect('home_page')
    else:
