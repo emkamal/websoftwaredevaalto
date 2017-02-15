@@ -1,5 +1,12 @@
 {% extends "base_without_jumbotron.html" %}
 {% block title %}{{ game.title }}{% endblock %}
+{% block head_meta %}
+<meta property="og:url"           content="{% url 'game' game.slug %}" />
+<meta property="og:type"          content="website" />
+<meta property="og:title"         content="{{ game.title }}" />
+<meta property="og:description"   content="{{ game.desc }}" />
+<meta property="og:image"         content="{{ game_banner_url }}" />
+{% endblock %}
 {% block content %}
 
 <div class="container">
@@ -15,52 +22,14 @@
       <h1>{{ game.title }}</h1>
     </div>
     <div class="col-md-2">
-      <div id="socialHolder" class="col-md-12">
-        <div id="socialShare" class="btn-group share-group">
-          <a data-toggle="dropdown" class="btn btn-info">
-            <i class="fa fa-share-alt fa-inverse"></i>
-          </a>
-          <button href="#" data-toggle="dropdown" class="btn btn-info dropdown-toggle share">
-  					<span class="caret"></span>
-  				</button>
-          <ul class="dropdown-menu">
-            <li>
-              <a data-original-title="Twitter" rel="tooltip" href="#" class="btn btn-twitter" data-placement="left">
-                  <i class="fa fa-twitter"></i>
-              </a>
-            </li>
-            <li>
-              <a data-original-title="Facebook" rel="tooltip" href="#" class="btn btn-facebook" data-placement="left">
-                  <i class="fa fa-facebook"></i>
-              </a>
-            </li>
-            <li>
-              <a data-original-title="Google+" rel="tooltip" href="#" class="btn btn-google" data-placement="left">
-                  <i class="fa fa-google-plus"></i>
-              </a>
-            </li>
-            <li>
-              <a data-original-title="LinkedIn" rel="tooltip" href="#" class="btn btn-linkedin" data-placement="left">
-                  <i class="fa fa-linkedin"></i>
-              </a>
-            </li>
-            <li>
-              <a data-original-title="Pinterest" rel="tooltip" class="btn btn-pinterest" data-placement="left">
-                  <i class="fa fa-pinterest"></i>
-              </a>
-            </li>
-            <li>
-              <a data-original-title="Email" rel="tooltip" class="btn btn-mail" data-placement="left">
-                  <i class="fa fa-envelope"></i>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
+
     </div>
   </div>
   <div class="row">
     <div class="col-md-8">
+      {% if game_banner_url != 'none' %}
+        <img class="game-banner image-responsive" src="{{ game_banner_url }}" alt="{{ game.title }}" />
+      {% endif %}
       <p>{{ game.desc }}</p>
       {% if userIsLoggedIn %}
         <h2>Instruction</h2>
@@ -68,22 +37,56 @@
       {% endif %}
     </div>
     <div class="col-md-4 ">
-      <h3 class="text-right">€ {{ game.price }}</h3>
-      {% include "buy_form.html" %}
+      <div class="row">
+        <div class="col-md-6 pricetag"><h3>€ {{ game.price }}</h3></div>
+        <div class="col-md-6 text-right">{% include "buy_form.html" %}</div>
+      </div>
       <hr />
-      <h4>Highscore</h4>
-      <table class="table">
-        <tr>
-          <th>Username</th>
-          <th>Score</th>
-        </tr>
-        {% for key, score in highscore.items %}
+      <div class="list-group">
+        <a href="#" class="list-group-item visitor">
+            <h3 class="pull-right">
+                <i class="fa fa-gamepad"></i>
+            </h3>
+            <h4 class="list-group-item-heading count">
+                {{ play_count }}</h4>
+            <p class="list-group-item-text">
+                Times played</p>
+        </a>
+        <a href="#" class="list-group-item google-plus">
+            <h3 class="pull-right">
+                <i class="fa fa-users"></i>
+            </h3>
+            <h4 class="list-group-item-heading count">
+                {{ purchase_count }}</h4>
+            <p class="list-group-item-text">
+                Subscribers</p>
+        </a>
+      </div>
+      {% if highscore|length > 0 %}
+        <hr/>
+        <h4>Highscore</h4>
+        <table class="table">
           <tr>
-            <td>{{key}}</td>
-            <td>{{score}}</td>
+            <th>Username</th>
+            <th>Score</th>
           </tr>
-        {% endfor %}
-      </table>
+          {% for key, score in highscore %}
+            <tr>
+              <td>{{key}}</td>
+              <td>{{score}}</td>
+            </tr>
+          {% endfor %}
+        </table>
+      {% endif %}
+      <hr />
+      <div class="fb-like"
+        data-href="{{ BASE_URL}}{% url 'game' game.slug %}"
+        data-layout="standard"
+        data-action="like"
+        data-show-faces="false">
+      </div>
+      <br/><br/>
+      <a class="twitter-share-button" href="{{ BASE_URL}}{% url 'game' game.slug %}">Tweet</a>
     </div>
   </div>
 </div>

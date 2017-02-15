@@ -12,6 +12,8 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.shortcuts import redirect
 import json
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import operator
 
 def home(request):
     featured_games = load_games(request, 'featured', '', 3)
@@ -121,13 +123,27 @@ def explore(request, type):
     else:
         raise Http404
 
+    # games_tuple = tuple(games)
+    paginator = Paginator(games, 9)
+
+    page = request.GET.get('page')
+
+    try:
+        games_output = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        games_output = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        games_output = paginator.page(paginator.num_pages)
+
     r = render (
         request,
         'browse.html',
         {
             'page_title': page_title + " Games",
             'page_subtitle': '',
-            'games': games,
+            'games': games_output,
             'next_purchase_id': next_purchase_id()
         },
         content_type='application/xhtml+xml'
@@ -169,7 +185,7 @@ def load_games(request, mode="all", tags="", num=3):
                 user_owner_games.append(user_purchase.game_id)
 
     try:
-        games = {}
+        games = []
         if mode == "all":
             games_querysets = Game.objects.all()
         elif mode == "featured":
@@ -194,7 +210,7 @@ def load_games(request, mode="all", tags="", num=3):
 
             checksum = get_checksum(game.price)
 
-            games[game.id] = {
+            games.append({
                 'id': game.id,
                 'title': game.title,
                 'price': game.price,
@@ -203,7 +219,7 @@ def load_games(request, mode="all", tags="", num=3):
                 'banner_url': game_banner_url,
                 'bought': game_bought,
                 'checksum': checksum
-            }
+            })
 
         return games
 
@@ -258,6 +274,7 @@ def build_games_view(request, querysets):
 
 #############################################
 def submit(request):
+<<<<<<< HEAD
    if not request.user.is_authenticated:
         return redirect((settings.LOGIN_URL))
    if request.method == "POST":
@@ -272,6 +289,7 @@ def submit(request):
    else:
        form = SubmitForm()
    return render(request, 'submit.html', {'form': form})
+
 
 ################################################
 
@@ -301,7 +319,9 @@ def game_by_slug(request, slug):
     gameplays = Gameplay.objects.filter(game_id=game.id).order_by('score')
 
     highscore = {}
+    play_count = 0
     for gameplay in gameplays:
+        play_count += 1
         if gameplay.score is not None:
             if gameplay.player_id in highscore:
                 if gameplay.score > highscore[gameplay.player_id]:
@@ -309,22 +329,37 @@ def game_by_slug(request, slug):
             else:
                 highscore[gameplay.player_id] = gameplay.score
 
+    highscore_output = {}
     for key, score in highscore.items():
-        user = get_object_or_404(User, id=key)
-        highscore[user.username] = highscore.pop(key)
+        # user = get_object_or_404(User, id=int(key))
+        user = User.objects.get(pk=int(key))
+        highscore_output[user.username] = highscore[key]
+
+    highscore_sorted = sorted(highscore_output.items(), key=operator.itemgetter(1), reverse=True)
 
     checksum = get_checksum(game.price)
+
+    purchases = Purchase.objects.filter(game_id=game.id)
+
+    game_banner_url = 'none';
+    for asset in game.asset_set.all():
+        if asset.asset_type == 'game-banner-750x400':
+            game_banner_url = asset.url
+            break
 
     return render(
         request,
         'gameview.html',
         {
             'game': game,
+            'game_banner_url': game_banner_url,
             'next_purchase_id': next_purchase_id(),
             'page_title': game.title,
             'checksum': checksum,
             'game_bought': game_bought,
-            'highscore': highscore
+            'highscore': highscore_sorted,
+            'play_count': play_count,
+            'purchase_count': purchases.count()
         }
     )
 

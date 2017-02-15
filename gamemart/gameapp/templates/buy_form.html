@@ -9,6 +9,6 @@
   <input type="hidden" name="error_url" value="{{BASE_URL}}{% url 'pay' 'error' game.slug %}" />
   <input type="hidden" name="checksum" value="{{ checksum }}" />
   <input type="hidden" id="id_amount" name="amount" value="{{ game.price }}" />
-  <input class="btn btn-primary" type="submit" value="Buy">
+    <input class="btn btn-primary" type="submit" value="Buy">
 </form>
 {% endif %}
