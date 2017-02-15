@@ -4,87 +4,84 @@
 
 <div class="container">
   <div class="row">
-    <div class="row">
-      <div class="col-md-9">
-        <h3>Featured Games</h3>
-      </div>
-      <div class="col-md-3">
-        <div class="controls pull-right"><a href='{% url "explore" "featured" %}'>view all</a></div>
-      </div>
+    <div class="col-xs-8">
+      <h3>Featured Games</h3>
     </div>
-    <div id="products" class="row list-group">
-      {% for key, game in featured_games.items %}
-        <div class="item col-xs-4 col-lg-4">
-          <div class="thumbnail">
-            <img class="group list-group-image" src="{{ game.banner_url }}" alt="no image" />
-            <div class="caption">
-              <h4 class="group inner list-group-item-heading"><a href="{{BASE_URL}}/game/{{ game.slug }}">{{ game.title }}</a></h4>
-              {# <p class="group inner list-group-item-text">{{game.desc|truncatechars:100}}</p>#}
-              {% if not game.bought %}
-                <div class="row">
-                  <div class="col-xs-12 col-md-6">
-                    <p class="lead">€ {{ game.price }}</p>
-                  </div>
-                  <div class="col-xs-12 col-md-6 text-right">
-                    {% include "buy_form.html" with next_purchase_id=next_purchase_id checksum=game.checksum %}
-                  </div>
-                </div>
-              {% else %}
-                <div class="row">
-                  <div class="col-xs-12 col-md-6"></div>
-                  <div class="col-xs-12 col-md-6 text-right">
-                    <a class="btn btn-success" href="{{BASE_URL}}/game/{{ game.slug }}">Play</a>
-                  </div>
-                </div>
-              {% endif %}
-            </div>
-          </div>
-        </div>
-      {% endfor %}
+    <div class="col-xs-4 text">
+      <ul class="pager pull-right">
+        <li><a href="{% url "explore" "featured" %}">view all</a></li>
+      </ul>
     </div>
   </div>
-  <div class="row">
-    <div class="row">
-      <div class="col-md-9">
-        <h3>Latest Games</h3>
-      </div>
-      <div class="col-md-3">
-        <div class="controls pull-right">
-          <a href='{% url "explore" "latest" %}'>view all</a></a>
-        </div>
-      </div>
-    </div>
-    <div id="products" class="row list-group">
-      {% for key, game in latest_games.items %}
-        <div class="item col-xs-4 col-lg-4">
-          <div class="thumbnail">
-            <img class="group list-group-image" src="{{ game.banner_url }}" alt="no image" />
-            <div class="caption">
-              <h4 class="group inner list-group-item-heading"><a href="{{BASE_URL}}/game/{{ game.slug }}">{{ game.title }}</a></h4>
-              {# <p class="group inner list-group-item-text">{{game.desc|truncatechars:100}}</p>#}
-              {% if not game.bought %}
-                <div class="row">
-                  <div class="col-xs-12 col-md-6">
-                    <p class="lead">€ {{ game.price }}</p>
-                  </div>
-                  <div class="col-xs-12 col-md-6 text-right">
-                    {% include "buy_form.html" with next_purchase_id=next_purchase_id checksum=game.checksum %}
-                  </div>
+  <div id="featured_games" class="row">
+    {% for game in featured_games %}
+      <div class="item col-xs-12 col-sm-4 col-lg-4">
+        <div class="thumbnail">
+          <img class="group list-group-image" src="{{ game.banner_url }}" alt="no image" />
+          <div class="caption">
+            <h4 class="group inner list-group-item-heading"><a href="{{BASE_URL}}/game/{{ game.slug }}">{{ game.title }}</a></h4>
+            {# <p class="group inner list-group-item-text">{{game.desc|truncatechars:100}}</p>#}
+            {% if not game.bought %}
+              <div class="row">
+                <div class="col-xs-6">
+                  <p class="lead">€ {{ game.price }}</p>
                 </div>
-              {% else %}
-                <div class="row">
-                  <div class="col-xs-12 col-md-6"></div>
-                  <div class="col-xs-12 col-md-6 text-right">
-                    <a class="btn btn-success" href="{{BASE_URL}}/game/{{ game.slug }}">Play</a>
-                  </div>
+                <div class="col-xs-6 text-right">
+                  {% include "buy_form.html" with next_purchase_id=next_purchase_id checksum=game.checksum %}
                 </div>
-              {% endif %}
-            </div>
+              </div>
+            {% else %}
+              <div class="row">
+                <div class="col-xs-6"></div>
+                <div class="col-xs-6 text-right">
+                  <a class="btn btn-success" href="{{BASE_URL}}/game/{{ game.slug }}">Play</a>
+                </div>
+              </div>
+            {% endif %}
           </div>
         </div>
-      {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+  <div class="row">
+    <div class="col-xs-8">
+      <h3>Latest Games</h3>
     </div>
-    
+    <div class="col-xs-4">
+      <ul class="pager pull-right">
+        <li><a href='{% url "explore" "latest" %}'>view all</a></li>
+      </ul>
+    </div>
+  </div>
+  <div id="latest_games" class="row">
+    {% for game in latest_games %}
+      <div class="item col-xs-12 col-sm-4 col-lg-4">
+        <div class="thumbnail">
+          <img class="group list-group-image" src="{{ game.banner_url }}" alt="no image" />
+          <div class="caption">
+            <h4 class="group inner list-group-item-heading"><a href="{{BASE_URL}}/game/{{ game.slug }}">{{ game.title }}</a></h4>
+            {# <p class="group inner list-group-item-text">{{game.desc|truncatechars:100}}</p>#}
+            {% if not game.bought %}
+              <div class="row">
+                <div class="col-xs-6">
+                  <p class="lead">€ {{ game.price }}</p>
+                </div>
+                <div class="col-xs-6 text-right">
+                  {% include "buy_form.html" with next_purchase_id=next_purchase_id checksum=game.checksum %}
+                </div>
+              </div>
+            {% else %}
+              <div class="row">
+                <div class="col-xs-6"></div>
+                <div class="col-xs-6 text-right">
+                  <a class="btn btn-success" href="{{BASE_URL}}/game/{{ game.slug }}">Play</a>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
   </div>
 </div>
 

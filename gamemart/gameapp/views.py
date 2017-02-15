@@ -123,19 +123,7 @@ def explore(request, type):
     else:
         raise Http404
 
-    # games_tuple = tuple(games)
-    paginator = Paginator(games, 9)
-
-    page = request.GET.get('page')
-
-    try:
-        games_output = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        games_output = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        games_output = paginator.page(paginator.num_pages)
+    paginated_games = games_paginator(request, games, 9)
 
     r = render (
         request,
@@ -143,13 +131,29 @@ def explore(request, type):
         {
             'page_title': page_title + " Games",
             'page_subtitle': '',
-            'games': games_output,
+            'games': paginated_games,
             'next_purchase_id': next_purchase_id()
         },
         content_type='application/xhtml+xml'
     )
 
     return HttpResponse(r)
+
+def games_paginator(request, games, num_per_page):
+    paginator = Paginator(games, num_per_page)
+
+    page = request.GET.get('page')
+
+    try:
+        paginated_games = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        paginated_games = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        paginated_games = paginator.page(paginator.num_pages)
+
+    return paginated_games
 
 def explore_by_taxonomy(request, tag):
     # taxonomy_type = request.path.split('/')[2]
@@ -195,31 +199,7 @@ def load_games(request, mode="all", tags="", num=3):
         elif mode == "tag":
             games_querysets = Game.objects.filter(taxonomy=tags)
 
-        for game in games_querysets:
-
-            game_banner_url = 'http://192.168.5.5/media/site/no-image-400x250.jpg';
-            for asset in game.asset_set.all():
-                if asset.asset_type == 'game-banner-400x250':
-                    game_banner_url = asset.url
-                    break
-
-            if game.id in user_owner_games:
-                game_bought = True
-            else:
-                game_bought = False
-
-            checksum = get_checksum(game.price)
-
-            games.append({
-                'id': game.id,
-                'title': game.title,
-                'price': game.price,
-                'desc': game.desc,
-                'slug': game.slug,
-                'banner_url': game_banner_url,
-                'bought': game_bought,
-                'checksum': checksum
-            })
+        games = build_games_view(request, games_querysets)
 
         return games
 
@@ -228,15 +208,16 @@ def load_games(request, mode="all", tags="", num=3):
 
 def build_games_view(request, querysets):
 
-    user_owner_games = [];
+    user_owned_games = [];
 
     if(request.user.is_authenticated()):
         user_purchases = Purchase.objects.filter(buyer_id=request.user.id)
         if user_purchases.exists():
             for user_purchase in user_purchases:
-                user_owner_games.append(user_purchase.game_id)
+                user_owned_games.append(user_purchase.game_id)
 
-    output = {}
+    output = []
+
     for game in querysets:
 
         game_banner_url = 'http://192.168.5.5/media/site/no-image-400x250.jpg';
@@ -245,12 +226,14 @@ def build_games_view(request, querysets):
                 game_banner_url = asset.url
                 break
 
-        if game.id in user_owner_games:
+        if game.id in user_owned_games:
             game_bought = True
         else:
             game_bought = False
 
-        output[game.id] = {
+        checksum = get_checksum(game.price)
+
+        output.append({
             'id': game.id,
             'title': game.title,
             'price': game.price,
@@ -258,8 +241,8 @@ def build_games_view(request, querysets):
             'slug': game.slug,
             'banner_url': game_banner_url,
             'bought': game_bought,
-            'a': user_owner_games
-        }
+            'checksum': checksum
+        })
 
     return output
 
@@ -446,7 +429,11 @@ def api(request, target):
             return HttpResponse(target, content_type="application/json")
 
 def search(request):
-    keywords_string = request.GET.get("keywords")
+    if(request.GET.get("keywords") is None):
+        keywords_string = ''
+    else:
+        keywords_string = request.GET.get("keywords")
+        
     keywords = keywords_string.split(' ')
     objects_list = []
     output = Game.objects.none()
@@ -460,4 +447,6 @@ def search(request):
 
     games = build_games_view(request, output)
 
-    return render(request, 'search.html', {'games': games, 'page_title': keywords_string + " games"})
+    paginated_games = games_paginator(request, games, 9)
+
+    return render(request, 'search.html', {'games': paginated_games, 'page_title': keywords_string + " games", 'search_string': 'keywords='+keywords_string })
