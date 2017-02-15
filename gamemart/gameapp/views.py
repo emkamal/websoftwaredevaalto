@@ -10,6 +10,7 @@ from .forms import SubmitForm
 #from .forms import LoginForm, SubmitForm
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.shortcuts import redirect
 import json
 
 def home(request):
@@ -257,6 +258,8 @@ def build_games_view(request, querysets):
 
 #############################################
 def submit(request):
+   if not request.user.is_authenticated:
+        return redirect((settings.LOGIN_URL))
    if request.method == "POST":
        form = SubmitForm(data=request.POST)
        if form.is_valid():
@@ -273,8 +276,8 @@ def submit(request):
 ################################################
 
 def next_purchase_id():
-    purchase = Purchase.objects.latest('id')
-    next_purchase_id = int(purchase.id)+1;
+    #purchase = Purchase.objects.latest('id')
+    #next_purchase_id = int(purchase.id)+1;
     return next_purchase_id
 
 def get_checksum(amount):
