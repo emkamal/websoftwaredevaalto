@@ -79,6 +79,8 @@ class SubmitForm(forms.ModelForm):
         instance.owner_id = request.user.id
         instance.added_date = timezone.now()
         instance.slug = orig = slugify(instance.title)
+        instance.owner_id = request.user.id
+        instance.added_date = timezone.now()
 
         for x in itertools.count(1):
             if not Game.objects.filter(slug=instance.slug).exists():
