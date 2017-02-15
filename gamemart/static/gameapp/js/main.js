@@ -24,15 +24,17 @@ $(document).ready(function(){
 		$form.addClass('active');
 		$input.focus();
 	});
-	// ONLY FOR DEMO // Please use $('form').submit(function(event)) to track from submission
-	// if your form is ajax remember to call `closeSearch()` to close the search container
-	// $(document).on('click', '.navbar-collapse form[role="search"].active button[type="submit"]', function(event) {
-	// 	event.preventDefault();
-	// 	var $form = $(this).closest('form'),
-	// 		$input = $form.find('input');
-	// 	$('#showSearchTerm').text($input.val());
-  //         closeSearch()
-	// });
+
+  $(document).on('click', 'body', function(e){
+    if(e.target.id == "navsearchform")
+      return;
+    //For descendants of menu_content being clicked, remove this check if you do not want to put constraint on descendants.
+    if($(e.target).closest('#navsearchform').length)
+      return;
+
+    console.log(e.target.id);
+    closeSearch();
+  })
 
   $(window).on('message', function(evt) {
     var msg = evt.originalEvent.data;
