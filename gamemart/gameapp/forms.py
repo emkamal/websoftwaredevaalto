@@ -3,7 +3,7 @@ import itertools
 from django import forms
 #from django.contrib.auth.models import User
 from django.utils.text import slugify
-from gameapp.models import User, Game
+from gameapp.models import User, Game, Taxonomy
 from django.utils import timezone
 
 
@@ -68,8 +68,8 @@ class SubmitForm(forms.ModelForm):
         model = Game # referencing the Game model and its fields
         fields = ('title', 'desc', 'instruction', 'url', 'price')
 
-         categories = forms.MultipleChoiceField(Taxonomy.objects.filter(taxonomy_type ='game_category'))
-         tags = forms.MultipleChoiceField(Taxonomy.objects.filter(taxonomy_type ='game_tag'))
+        categories = forms.MultipleChoiceField(Taxonomy.objects.filter(taxonomy_type ='game_category'))
+        tags = forms.MultipleChoiceField(Taxonomy.objects.filter(taxonomy_type ='game_tag'))
 
 
 
