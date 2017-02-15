@@ -68,6 +68,11 @@ class SubmitForm(forms.ModelForm):
         model = Game # referencing the Game model and its fields
         fields = ('title', 'desc', 'instruction', 'url', 'price')
 
+         categories = forms.MultipleChoiceField(Taxonomy.objects.filter(taxonomy_type ='game_category'))
+         tags = forms.MultipleChoiceField(Taxonomy.objects.filter(taxonomy_type ='game_tag'))
+
+
+
     def save(self, request):
         instance = super(SubmitForm, self).save(commit=False)
 
