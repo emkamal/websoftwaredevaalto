@@ -2,6 +2,7 @@ body{
   margin-top: 100px;
 }
 .jumbotron{
+  background: url('../img/geometry.png') repeat;
   margin-top: -50px;
 }
 #gameframe{
