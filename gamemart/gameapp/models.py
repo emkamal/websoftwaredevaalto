@@ -7,14 +7,14 @@ class Taxonomy(models.Model):
     label = models.CharField(max_length=50)
     slug = models.SlugField(max_length=50)
     parent = models.ForeignKey('self',null=True,blank=True)
-    games = models.ManyToManyField('Game')
+    # games = models.ManyToManyField('Game')
 
     def __str__(self):
         return u'%s' % (self.label)
 
-class Game_Taxonomy(models.Model):
-    game = models.ForeignKey('Game')
-    taxonomy = models.ForeignKey('Taxonomy')
+# class Game_Taxonomy(models.Model):
+#     game = models.ForeignKey('Game')
+#     taxonomy = models.ForeignKey('Taxonomy')
 
 class Review(models.Model):
     game = models.ForeignKey('Game')
@@ -48,6 +48,7 @@ class Game(models.Model):
     price = models.FloatField()
     added_date = models.DateTimeField(auto_now=True)
     is_featured = models.BooleanField(default=False)
+    taxonomies = models.ManyToManyField('Taxonomy')
     # banner = model.ImageField(upload_to='games')
 
     def __str__(self):
