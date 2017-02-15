@@ -253,15 +253,13 @@ def build_games_view(request, querysets):
 #         form.save()
 #
 #     return render(request, 'submit.html', {'page_title': 'Submit Games'})
-
-
 def submit(request):
    if not request.user.is_authenticated:
         return redirect((settings.LOGIN_URL))
    if request.method == "POST":
        form = SubmitForm(data=request.POST)
        if form.is_valid():
-           game = form.save(request)
+           game = form.save()
            game.save()
            return redirect('home_page')
    else:

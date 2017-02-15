@@ -71,6 +71,8 @@ class SubmitForm(forms.ModelForm):
     def save(self, request):
         instance = super(SubmitForm, self).save(commit=False)
 
+        instance.owner_id = request.user.id
+        instance.added_date = timezone.now()
         instance.slug = orig = slugify(instance.title)
         instance.owner_id = request.user.id
         instance.added_date = timezone.now()
