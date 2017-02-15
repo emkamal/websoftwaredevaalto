@@ -255,7 +255,7 @@ def build_games_view(request, querysets):
 #     return render(request, 'submit.html', {'page_title': 'Submit Games'})
 
 
-#############################################
+
 def submit(request):
 
    if not request.user.is_authenticated:
@@ -263,9 +263,9 @@ def submit(request):
    if request.method == "POST":
        form = SubmitForm(data=request.POST)
        if form.is_valid():
-           game = form.save(commit=False)
-           game.owner_id = request.user.id
-           game.added_date = timezone.now()
+           game = form.save(request)
+           #game.owner_id = request.user.id
+           #game.added_date = timezone.now()
            game.save()
            #return redirect('game_detail', pk=game.pk)
            return redirect('home_page')
@@ -274,7 +274,7 @@ def submit(request):
    return render(request, 'submit.html', {'form': form})
 
 
-################################################
+
 
 def next_purchase_id():
     #purchase = Purchase.objects.latest('id')
@@ -433,7 +433,7 @@ def search(request):
         keywords_string = ''
     else:
         keywords_string = request.GET.get("keywords")
-        
+
     keywords = keywords_string.split(' ')
     objects_list = []
     output = Game.objects.none()

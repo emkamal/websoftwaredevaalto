@@ -4,6 +4,7 @@ from django import forms
 #from django.contrib.auth.models import User
 from django.utils.text import slugify
 from gameapp.models import User, Game
+from django.utils import timezone
 
 
 class UserForm(forms.ModelForm):
@@ -67,9 +68,11 @@ class SubmitForm(forms.ModelForm):
         model = Game # referencing the Game model and its fields
         fields = ('title', 'desc', 'instruction', 'url', 'price')
 
-    def save(self):
+    def save(self, request):
         instance = super(SubmitForm, self).save(commit=False)
 
+        instance.owner_id = request.user.id
+        instance.added_date = timezone.now()
         instance.slug = orig = slugify(instance.title)
 
         for x in itertools.count(1):
