@@ -3,60 +3,37 @@
 {% block content %}
 
 <div class="container">
-    <div class="row">
-     <div class="col-md-6 col-sm-6 col-xs-12">
-      <form method="post"> {% csrf_token %}
-       <div class="form-group ">
-        <label class="control-label requiredField" for="name">
-         Game title
-         <span class="asteriskField">
-          *
-         </span>
-        </label>
-        <!--<input class="form-control" id="name" name="name" placeholder="Name of your game" type="text"/>-->
-        <input class="form-control" id="name" name="title" placeholder="Name of your game" type="text"/>
-       </div>
-       <div class="form-group ">
-        <label class="control-label " for="message">
-         Description
-        </label>
-        <!--<textarea class="form-control" cols="40" id="message" name="message" placeholder="Describe your game" rows="10"></textarea>-->
-        <textarea class="form-control" cols="40" id="message" name="desc" placeholder="Describe your game" rows="10"></textarea>
-       </div>
-       <div class="form-group ">
-        <label class="control-label requiredField" for="price">
-         Price
-         <span class="asteriskField">
-          *
-         </span>
-        </label>
-        <input class="form-control" id="price" name="price" placeholder="set your price" type="text"/>
-       </div>
-       <div class="form-group ">
-        <label class="control-label requiredField" for="url">
-         URL
-         <span class="asteriskField">
-          *
-         </span>
-        </label>
-        <input class="form-control" id="url" name="url" placeholder="Put the URL of your game here" type="text"/>
-       </div>
-       <div class="form-group ">
-        <label class="control-label " for="textarea">
-         Instruction
-        </label>
-        <textarea class="form-control" cols="40" id="textarea" name="instruction" placeholder="instruction on how to play your games" rows="10"></textarea>
-       </div>
-       <div class="form-group">
-        <div>
-         <button class="btn btn-primary " name="submit" type="submit">
-          Submit
-         </button>
+  <div class="row">
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <form id="submitgamesform" method="post" enctype="multipart/form-data">{% csrf_token %}
+          {% for field in form %}
+              {% if field.errors %}
+                  <div class="control-group error form-group">
+                      <label class="control-label">{{ field.label }}</label>
+                      <div class="">{{ field }}
+                          <span class="help-inline">
+                              {% for error in  field.errors %}{{ error }}{% endfor %}
+                          </span>
+                      </div>
+                  </div>
+              {% else %}
+                  <div class="form-group">
+                      <label class="control-label">{{ field.label }}</label>
+                      <div class="">{{ field }}
+                          {% if field.help_text %}
+                              <p class="help-inline"><small>{{ field.help_text }}</small></p>
+                          {% endif %}
+                      </div>
+                  </div>
+              {% endif %}
+          {% endfor %}
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" >Submit</button>
         </div>
-       </div>
       </form>
-     </div>
     </div>
-
+  </div>
 </div>
+
+<!-- -->
 {% endblock %}

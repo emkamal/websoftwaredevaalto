@@ -1,4 +1,7 @@
 $(document).ready(function(){
+
+  $("#submitgamesform").find('input, textarea, select').addClass('form-control');
+
   $(".dropdown").hover(
       function() {
           $('.dropdown-menu', this).not('.in .dropdown-menu').stop(true,true).slideDown("400");

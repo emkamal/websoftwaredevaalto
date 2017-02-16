@@ -66,12 +66,10 @@ class UserForm(forms.ModelForm):
 class SubmitForm(forms.ModelForm):
     class Meta:
         model = Game # referencing the Game model and its fields
-        fields = ('title', 'desc', 'instruction', 'url', 'price')
+        fields = ['title', 'desc', 'instruction', 'url', 'price']
 
-        categories = forms.MultipleChoiceField(Taxonomy.objects.filter(taxonomy_type ='game_category'))
-        tags = forms.MultipleChoiceField(Taxonomy.objects.filter(taxonomy_type ='game_tag'))
-
-
+    categories = forms.ModelMultipleChoiceField(Taxonomy.objects.filter(taxonomy_type='game_category'))
+    image = forms.FileField()
 
     def save(self, request):
         instance = super(SubmitForm, self).save(commit=False)
@@ -79,8 +77,6 @@ class SubmitForm(forms.ModelForm):
         instance.owner_id = request.user.id
         instance.added_date = timezone.now()
         instance.slug = orig = slugify(instance.title)
-        instance.owner_id = request.user.id
-        instance.added_date = timezone.now()
 
         for x in itertools.count(1):
             if not Game.objects.filter(slug=instance.slug).exists():

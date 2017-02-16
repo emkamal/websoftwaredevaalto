@@ -14,6 +14,10 @@ from django.shortcuts import redirect
 import json
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import operator
+import os
+import io
+import sys
+from PIL import Image, ImageOps
 
 def home(request):
     featured_games = load_games(request, 'featured', '', 3)
@@ -195,7 +199,7 @@ def load_games(request, mode="all", tags="", num=3):
         elif mode == "featured":
             games_querysets = Game.objects.filter(is_featured=True)[:num]
         elif mode == "latest":
-            games_querysets = Game.objects.all()[:num]
+            games_querysets = Game.objects.all().order_by('-added_date')[:num]
         elif mode == "tag":
             games_querysets = Game.objects.filter(taxonomy=tags)
 
@@ -219,7 +223,6 @@ def build_games_view(request, querysets):
     output = []
 
     for game in querysets:
-
         game_banner_url = 'http://192.168.5.5/media/site/no-image-400x250.jpg';
         for asset in game.asset_set.all():
             if asset.asset_type == 'game-banner-400x250':
@@ -246,30 +249,80 @@ def build_games_view(request, querysets):
 
     return output
 
-
-# def submit(request):
-#     form = SubmitForm(request.POST or None)
-#     if form.is_valid():
-#         form.save()
-#
-#     return render(request, 'submit.html', {'page_title': 'Submit Games'})
 def submit(request):
-   if not request.user.is_authenticated:
+    if not request.user.is_authenticated:
         return redirect((settings.LOGIN_URL))
-   if request.method == "POST":
-       form = SubmitForm(data=request.POST)
-       if form.is_valid():
-           game = form.save(request)
-           game.save()
-           return redirect('home_page')
-   else:
-       form = SubmitForm()
-   return render(request, 'submit.html', {'form': form})
+    if request.method == "POST":
+        form = SubmitForm(request.POST, request.FILES)
+        if form.is_valid():
+            game = form.save(request)
+            game.save()
 
+            categories = form.cleaned_data['categories']
+
+            for category in categories:
+                game.taxonomies.add(category.id)
+
+            handle_uploaded_file(request, request.FILES['image'], game)
+
+            return redirect('home_page')
+    else:
+        form = SubmitForm()
+    return render(request, 'submit.html', {'form': form, 'page_title': 'Submit Games'})
+
+def handle_uploaded_file(request, file, game):
+    # with open('/media/image.jpg', 'wb+') as destination:
+    #     for chunk in file.chunks():
+    #         destination.write(chunk)
+
+    # folder = request.path.replace("/", "_")
+    # folder = 'media/games/'
+    folder = 'media/games/' + game.slug
+    original_filename, original_fileext = os.path.splitext(request.FILES['image'].name)
+    uploaded_filename = game.slug+"-banner-original-size"+original_fileext
+
+    # create the folder if it doesn't exist.
+    try:
+        os.mkdir(os.path.join(settings.BASE_DIR, folder))
+    except:
+        pass
+
+    # save the uploaded file inside that folder.
+    full_filename = os.path.join(settings.BASE_DIR, folder, uploaded_filename)
+    fout = io.open(full_filename, 'wb+')
+    # Iterate through the chunks.
+    for chunk in file.chunks():
+        fout.write(chunk)
+    fout.close()
+
+    generate_thumbnails(full_filename, game)
+
+def generate_thumbnails(filename, game):
+    sizes = {
+        '128x128': (128, 128),
+        '400x250': (400, 250),
+        '750x400': (750, 400)
+    }
+
+    for key, size in sizes.items():
+        outfile = filename.replace('original-size', key)
+
+        try:
+            im = Image.open(filename)
+            # im.thumbnail(size)
+            # im.save(outfile, "JPEG")
+            thumb = ImageOps.fit(im, size, Image.ANTIALIAS)
+            thumb.save(outfile, "JPEG")
+
+            asset = Asset(asset_type='game-banner-'+key,url=outfile.replace(settings.BASE_DIR, ''),game_id=game.id)
+            asset.save()
+
+        except IOError:
+            print("cannot create thumbnail for")
 
 def next_purchase_id():
-    #purchase = Purchase.objects.latest('id')
-    #next_purchase_id = int(purchase.id)+1;
+    purchase = Purchase.objects.latest('id')
+    next_purchase_id = int(purchase.id)+1;
     return next_purchase_id
 
 def get_checksum(amount):

@@ -33,6 +33,7 @@
                 {% endfor %}
               </ul>
             </div>
+            <!--
             <div class="col-md-4">
               <h5>Tags</h5>
               <ul>
@@ -41,10 +42,11 @@
                 {% endfor %}
               </ul>
             </div>
+          -->
           </div>
         </li>
         {% if userIsLoggedIn %}
-    
+
           <li {% if section == 'submit' %} class='selected' {% endif %} >
             <li><a href="{% url 'submit' %}">Submit Games</a></li>
           </li>

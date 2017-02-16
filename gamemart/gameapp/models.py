@@ -56,7 +56,7 @@ class Game(models.Model):
 
 class Asset(models.Model):
     asset_type = models.CharField(max_length=50)
-    url = models.URLField()
+    url = models.FileField()
     # user = models.ForeignKey('User', null=True)
     game = models.ForeignKey('Game', null=True, on_delete=models.CASCADE)
 
