@@ -26,11 +26,14 @@ urlpatterns = [
     url(r'^games/category/(?P<tag>[-\w]+)/$', views.explore_by_taxonomy, name='browse_by_category'),
     url(r'^games/tag/(?P<tag>[-\w]+)/$', views.explore_by_taxonomy, name='browse_by_tag'),
     url(r'^submit/$', views.submit, name='submit'),
+    url(r'^developer/$', views.developer, name='developer'),
     url(r'^game/(?P<slug>[-\w]+)/$', views.game_by_slug, name='game'),
     url(r'^payment/(?P<status>[-\w]+)/on/(?P<slug>[-\w]+)/$', views.payment, name='pay'),
     url(r'^api/(?P<target>[-\w]+)/$', views.api),
     url(r'^search/$', views.search, name='search'),
     url(r'^user/(?P<slug>[-\w]+)/$', views.game_by_slug, name='user_view'),
+    url(r'^game/edit/([0-9]+)/$', views.edit_game, name='edit_game'),
+    url(r'^game/delete/([0-9]+)/$', views.del_game, name='del_game'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

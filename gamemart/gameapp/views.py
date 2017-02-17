@@ -265,7 +265,7 @@ def submit(request):
 
             handle_uploaded_file(request, request.FILES['image'], game)
 
-            return redirect('home_page')
+            return redirect('developer')
     else:
         form = SubmitForm()
     return render(request, 'submit.html', {'form': form, 'page_title': 'Submit Games'})
@@ -319,6 +319,125 @@ def generate_thumbnails(filename, game):
 
         except IOError:
             print("cannot create thumbnail for")
+
+def developer(request):
+    if not request.user.is_authenticated:
+        return redirect((settings.LOGIN_URL))
+
+    games = Game.objects.filter(owner_id=request.user.id)
+    games_output = []
+    sales_output = []
+    total_income = 0
+    total_play = 0
+    total_game = games.count()
+    buyers = []
+
+    for game in games:
+        purchases = game.purchase_set.filter(status='success')
+
+        games_output.append({
+            'id': game.id,
+            'title': game.title,
+            'price': game.price,
+            'income': game.price*game.purchase_set.count(),
+            'featured': game.is_featured,
+            'slug': game.slug,
+            'added_date': game.added_date,
+            'purchase_count': game.purchase_set.count(),
+            'play_count': game.gameplay_set.count(),
+        })
+
+        total_play += game.gameplay_set.count()
+
+        for purchase in purchases:
+            user = User.objects.get(id=purchase.buyer_id)
+
+            sales_output.append({
+                'id': purchase.id,
+                'game_slug': game.slug,
+                'game_title': game.title,
+                'buyer_name': user.username,
+                'bought_date': purchase.date,
+                'amount': purchase.amount
+            })
+
+            if user.username not in buyers:
+                buyers.append(user.username)
+
+            total_income += purchase.amount
+
+    return render(
+        request,
+        'developer.html',
+        {
+            'games': games_output,
+            'sales': sales_output,
+            'total_income': total_income,
+            'total_play': total_play,
+            'total_game': total_game,
+            'total_buyer': len(buyers),
+            'page_title': 'Developer Dashboard'
+        }
+    )
+
+def edit_game(request, game_id):
+    game = Game.objects.get(id=game_id)
+
+    if not request.user.is_authenticated():
+        return redirect((settings.LOGIN_URL))
+
+    if game.owner_id != request.user.id:
+        return redirect('developer')
+
+    if request.method == "POST":
+        form = SubmitForm(request.POST, request.FILES, instance=game)
+        if form.is_valid():
+            game = form.save(request)
+            game.save()
+
+            categories = form.cleaned_data['categories']
+
+            for category in categories:
+                game.taxonomies.add(category.id)
+
+            handle_uploaded_file(request, request.FILES['image'], game)
+
+            return redirect('developer')
+    else:
+
+        data = {
+            'id': game.id,
+            'title': game.title,
+            'desc': game.desc,
+            'instruction': game.instruction,
+            'url': game.url,
+            'price': game.price
+        }
+        form = SubmitForm(initial=data)
+
+    return render(
+        request,
+        'edit_game.html',
+        {
+            'form': form,
+            'page_title': 'Edit game'
+        }
+    )
+
+def del_game(request, game_id):
+
+    if request.user.is_authenticated():
+        game = Game.objects.get(id=game_id)
+        if game.owner_id == request.user.id:
+            game.delete()
+            return redirect('developer')
+        else:
+            redirect('developer')
+    else:
+        redirect('login')
+
+    return redirect('login')
+
 
 def next_purchase_id():
     purchase = Purchase.objects.latest('id')

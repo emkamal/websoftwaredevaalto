@@ -71,6 +71,10 @@ class SubmitForm(forms.ModelForm):
     categories = forms.ModelMultipleChoiceField(Taxonomy.objects.filter(taxonomy_type='game_category'))
     image = forms.FileField()
 
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(SubmitForm, self).__init__(*args, **kwargs)
+
     def save(self, request):
         instance = super(SubmitForm, self).save(commit=False)
 

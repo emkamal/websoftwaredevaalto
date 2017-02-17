@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Submit Games{% endblock %}
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <form id="submitgamesform" method="post" enctype="multipart/form-data">{% csrf_token %}
+          {% for field in form %}
+              {% if field.errors %}
+                  <div class="control-group error form-group">
+                      <label class="control-label">{{ field.label }}</label>
+                      <div class="">{{ field }}
+                          <span class="help-inline">
+                              {% for error in  field.errors %}{{ error }}{% endfor %}
+                          </span>
+                      </div>
+                  </div>
+              {% else %}
+                  <div class="form-group">
+                      <label class="control-label">{{ field.label }}</label>
+                      <div class="">{{ field }}
+                          {% if field.help_text %}
+                              <p class="help-inline"><small>{{ field.help_text }}</small></p>
+                          {% endif %}
+                      </div>
+                  </div>
+              {% endif %}
+          {% endfor %}
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" >Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- -->
+{% endblock %}
